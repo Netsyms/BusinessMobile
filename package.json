@@ -1,0 +1,9 @@
+{
+    "name": "com.netsyms.BusinessMobile",
+    "displayName": "Business for Mobile",
+    "version": "1.0.0",
+    "description": "Mobile client for the Netsyms Business Apps.",
+    "main": "index.html",
+    "author": "Netsyms Technologies",
+    "license": "netsyms-business-license"
+}

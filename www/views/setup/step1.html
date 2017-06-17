@@ -1,0 +1,24 @@
+<p>
+    <b>Step One</b>
+    <br />
+    Enter the Portal API connection URL. If you don't know this, contact your 
+    technical support for assistance.
+</p>
+
+<input type="url" class="form-control" id="portal_url" placeholder="https://portal-url.com" />
+
+<script>
+    function processSetupFragment(callback) {
+        var url = $('#portal_api_url').val();
+        $.getJSON(url + "/mobile", {
+            action: "ping"
+        }, function (resp) {
+           if (resp.status === "OK") {
+               localStorage.setItem("portal_url", url + "/mobile");
+               callback(true);
+           } else {
+               callback(false);
+           }
+        });
+    }
+</script>

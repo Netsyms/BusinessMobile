@@ -1,0 +1,45 @@
+<div class="panel panel-blue">
+    <div class="panel-heading">
+        <h3 class="panel-title">Setup</h3>
+    </div>
+    <div class="panel-body">
+        <p>Welcome! There's a few things we need to do to get everything ready.</p>
+
+        <div id="setup-fragment">
+
+        </div>
+    </div>
+    <div class="panel-footer">
+        <button class="btn btn-blue pull-right" onclick="nextStep()" id="setup_next_step"><span>Next</span> <i class="fa fa-chevron-right"></i></button>
+    </div>
+</div>
+
+<script>
+    var setup_step = 1;
+    var setup_max_step = 3;
+    var next_processing = false;
+    function nextStep() {
+        if (next_processing) {
+            return false;
+        }
+        next_processing = true;
+        processSetupFragment(function (success) {
+            if (success) {
+                setup_step++;
+                next_processing = false;
+                
+                if (setup_step > setup_max_step) {
+                    // If we're done with the last step, open the home screen
+                    openscreen("home", "FADE");
+                } else {
+                    // Open the next step
+                    openfragment("setup/step" + setup_step, "#setup-fragment", "SLIDE");
+                    // For the last step, change the Next button to Finish
+                    if (setup_step == setup_max_step) {
+                        $("#setup_next_step span").text("Finish");
+                    }
+                }
+            }
+        });
+    }
+</script>
