@@ -1,0 +1,39 @@
+<br />
+<div class="app-dock-container">
+    <div class="app-dock" id="app-dock">
+
+    </div>
+</div>
+
+<script>
+    function openapp(id, api, url, icon, title) {
+        $('#content-zone').load("views/app.html", function () {
+            launchapp(id, api, url, icon, title);
+        });
+    }
+    
+    function loadapps() {
+        $.post(localStorage.getItem("portalurl"), {
+            username: localStorage.getItem("username"),
+            key: localStorage.getItem("key"),
+            action: "listapps"
+        }, function (data) {
+            if (data.status === 'OK') {
+                Object.keys(data.apps).forEach(function (k) {
+                    var app = data.apps[k];
+                    var iconurl = app.icon;
+                    if (!app.icon.startsWith("http")) {
+                        iconurl = app.url + app.icon;
+                    }
+                    $('#app-dock').append("<div class=\"app-dock-item\" onclick=\"openapp('" + k + "', '" + app.mobileapi + "', '" + app.url + "', '" + iconurl + "', '" + app.title + "')\"><p><img src=\"" + iconurl + "\" class=\"img-responsive app-icon\" /><span>" + app.title + "</span></p></div>");
+                });
+            } else {
+                navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
+            }
+        }, "json").fail(function () {
+            navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
+        });
+    }
+    
+    loadapps();
+</script>

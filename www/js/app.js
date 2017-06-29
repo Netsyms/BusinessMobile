@@ -1,10 +1,36 @@
-
+userinfo = null;
 $(document).ready(function () {
     /* Fade out alerts */
     $(".alert .close").click(function (e) {
         $(this).parent().fadeOut("slow");
     });
+
+    if (localStorage.getItem("setupcomplete")) {
+        getuserinfo(function () {
+           openscreen("home");
+        });
+    } else {
+        openscreen("setup1");
+    }
 });
+
+function getuserinfo(callback) {
+    $.post(localStorage.getItem("portalurl"), {
+        username: localStorage.getItem("username"),
+        key: localStorage.getItem("key"),
+        password: localStorage.getItem("password"),
+        action: "user_info"
+    }, function (data) {
+        if (data.status === 'OK') {
+            userinfo = data.info;
+            callback();
+        } else {
+            navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
+        }
+    }, "json").fail(function () {
+        navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
+    });
+}
 
 /**
  * Switches the app to the given screen.
@@ -74,8 +100,7 @@ function closemodal(modalselector) {
 
 // Handle back button to close things
 document.addEventListener("backbutton", function (event) {
-    openscreen("home");
+    if (localStorage.getItem("setupcomplete")) {
+        openscreen("home");
+    }
 }, false);
-
-function check_setup() {
-}

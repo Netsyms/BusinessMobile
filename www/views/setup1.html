@@ -1,0 +1,60 @@
+<br />
+<div class="panel panel-blue">
+    <div class="panel-heading">
+        <h3 class="panel-title">Setup</h3>
+    </div>
+    <div class="panel-body">
+        <p>Welcome! There's a few things we need to do to get everything ready.
+            <br /><br />
+            Open Portal on another device and go to your account settings.  Generate a mobile sync code, then press the button below to scan it.
+        </p>
+        <div class="btn btn-primary" onclick="scanCode()"><i class="fa fa-qrcode"></i> Scan Code</div>
+    </div>
+</div>
+
+<script>
+    function scanCode() {
+        try {
+            cordova.plugins.barcodeScanner.scan(
+                    function (result) {
+                        if (!result.cancelled) {
+                            if (!result.text.startsWith("bizsync://")) {
+                                navigator.notification.alert("Invalid sync code.  Try again.", null, "Error", 'Dismiss');
+                                return;
+                            }
+                            var url = result.text.replace("bizsync://", "");
+                            var parts = url.split("/");
+                            var portal = parts[0].replace(/\\/g, "/");
+                            var username = parts[1];
+                            var key = parts[2];
+                            $.post(portal, {
+                                username: username,
+                                key: key,
+                                action: "check_key"
+                            }, function (data) {
+                                if (data.status === 'OK') {
+                                    localStorage.setItem("username", username);
+                                    localStorage.setItem("portalurl", portal);
+                                    localStorage.setItem("key", key);
+                                    openscreen("setup2");
+                                } else {
+                                    navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
+                                }
+                            }, "json").fail(function () {
+                                navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
+                            });
+                        }
+                    },
+                    function (error) {
+                        navigator.notification.alert("Scanning failed: " + error, null, "Error", 'Dismiss');
+                    },
+                    {
+                        "showFlipCameraButton": false,
+                        "prompt": "Scan mobile sync QR code."
+                    }
+            );
+        } catch (ex) {
+            navigator.notification.alert(ex.message, null, "Error", 'Dismiss');
+        }
+    }
+</script>

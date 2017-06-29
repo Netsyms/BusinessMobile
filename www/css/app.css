@@ -1,58 +1,37 @@
-.banner-image {
-    max-height: 100px;
-    margin: 2em auto;
+.app-dock-container {
+    display: flex;
+}
+
+.app-dock {
+    margin: 0 auto 10px auto;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.app-icon {
     border: 1px solid grey;
-    border-radius: 12px;
+    border-radius: 20%;
 }
 
-.navbar-brand {
-    font-size: 110%;
+.app-dock-item {
+    padding: 0px 5px 2px 5px;
+    min-width: 100px;
 }
 
-.footer {
-    margin-top: 10em;
+.app-dock-item p {
+    margin-bottom: 0px;
+    font-size: 95%;
+    color: #555;
+}
+
+.app-dock-item p img {
+    width: 50px;
+    display: block;
+    margin: 0 auto;
+}
+
+.app-dock-item p span {
+    display: block;
     text-align: center;
-}
-
-/*
-==============================
-            THEMING
-==============================
-
-Changing the .navbar-inverse background should be enough on modern browsers.
-If this app is to be used on IE < 9 (not supported), also set a background-color
-to replace the rgba()s.
-
-To use a material-color.css navbar theme, remove all the theming styles in this 
-file and add a .navbar-[color] class to the navbar in app.php.
-*/
-
-/* navbar background */
-.navbar-inverse {
-    /* background-color: green; */
-}
-
-/* Selected page background */
-.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
-    background: rgba(0,0,0,.2);
-}
-
-.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
-    border-color: rgba(0,0,0,.2);
-}
-
-.navbar-inverse .navbar-toggle .icon-bar {
-    background-color: white;
-}
-
-.navbar-inverse .navbar-brand {
-    color: white;
-}
-
-.navbar-inverse .navbar-nav > li > a {
-    color: white;
-}
-
-.navbar-inverse .navbar-link {
-    color: white;
 }

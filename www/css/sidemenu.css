@@ -1,0 +1,124 @@
+#swipe-nav {
+    display: none;
+    visibility: hidden;
+}
+
+#swipe-shader {
+    display: none;
+    visibility: hidden;
+}
+
+@media screen and (max-width: 767px) {
+    #navbar-collapse {
+        display: none;
+    }
+
+    button.navbar-toggle[data-toggle="collapse"] {
+        float: left;
+        margin-left: 15px;
+    }
+
+    .navbar-header .navbar-brand {
+        margin-left: -20px;
+    }
+
+    .navbar-header .navbar-brand img {
+        display: none;
+    }
+
+    #swipe-nav {
+        display: none;
+        visibility: visible;
+        overflow-y: scroll;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 60%;
+        z-index: 9999999;
+        max-width: 300px;
+        min-width: 200px;
+        background-color: #fafafa;
+        box-shadow: 5px 0px 15px 0px rgba(0,0,0,0.5);
+    }
+
+    #swipe-nav #swipe-header {
+        height: 150px;
+        background-color: #eeeeee;
+        position: relative;
+    }
+
+    #swipe-nav #swipe-header #swipe-username {
+        position: absolute;
+        bottom: 0;
+        padding-left: 10px;
+        padding-bottom: 10px;
+        font-size: 110%;
+    }
+
+    #swipe-nav #swipe-header #swipe-appicon {
+        position: absolute;
+        top: 0;
+        padding-left: 20px;
+        padding-top: 20px;
+        height: 80px;
+    }
+
+    #swipe-nav #swipe-header #swipe-username .fa {
+        font-size: 120%;
+    }
+
+    #swipe-nav ul {
+        margin-bottom: 10px;
+        padding-left: 2px;
+        list-style-type: none;
+        padding: 3px;
+    }
+
+    #swipe-nav ul li {
+        color: #424242;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+
+    #swipe-nav ul li a:focus,a:active {
+        background-color: #e0e0e0;
+    }
+
+    #swipe-nav ul li i.fa {
+        font-size: 120%;
+        margin-right: 10px;
+        margin-left: 5px;
+    }
+
+    #swipe-nav ul li a {
+        display: inline-block;
+        color: #424242;
+        font-size: 110%;
+        text-decoration: none;
+        width: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    #swipe-nav ul li a:hover {
+        text-decoration: none;
+    }
+
+    #swipe-nav #swipe-pages {
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eeeeee;
+    }
+
+    #swipe-shader {
+        position: fixed;
+        display: none;
+        visibility: visible;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 9999998;
+    }
+}

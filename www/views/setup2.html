@@ -1,0 +1,37 @@
+<br />
+<div class="panel panel-blue">
+    <div class="panel-heading">
+        <h3 class="panel-title">Setup</h3>
+    </div>
+    <div class="panel-body">
+        <p>Almost done!
+            <br /><br />
+            Please enter your password, then press Finish.
+        </p>
+        <input type="password" id="passbox" class="form-control" placeholder="Password" style="display: block;" />
+        <br />
+        <div class="btn btn-primary" onclick="savePassword()"><i class="fa fa-check"></i> Finish</div>
+    </div>
+</div>
+
+<script>
+    function savePassword() {
+        $.post(localStorage.getItem("portalurl"), {
+            username: localStorage.getItem("username"),
+            key: localStorage.getItem("key"),
+            password: $('#passbox').val(),
+            action: "check_password"
+        }, function (data) {
+            if (data.status === 'OK') {
+                localStorage.setItem("password", $('#passbox').val());
+                localStorage.setItem("setupcomplete", true);
+                navigator.notification.alert("Setup complete!", null, "Success", 'Continue');
+                openscreen("home");
+            } else {
+                navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
+            }
+        }, "json").fail(function () {
+            navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
+        });
+    }
+</script>
