@@ -1,5 +1,28 @@
 <div class="list-group">
-    <div class="list-group-item">
-        
+    <div class="list-group-item" onclick="deleteall()">
+	<b>Log out and unpair</b>
+	<p>Forget all stored user data.  You will need to run the setup again.</p>
     </div>
 </div>
+
+<script>
+    setnavbar("settings");
+
+    function deleteall() {
+	navigator.notification.confirm("Really wipe user data?  You will need to resync the app with Portal to use it again.", function (result) {
+		if (result != 1) {
+			return;
+		}
+		// Wipe localStorage
+		localStorage.removeItem("setupcomplete");
+		localStorage.removeItem("username");
+		localStorage.removeItem("portalurl");
+		localStorage.removeItem("key");
+		localStorage.clear();
+		// force-reload app
+		navigator.notification.alert("Connection data and credentials erased.", function () {
+		    document.location.href = "index.html";
+		}, "App Reset", 'Continue');
+	}, "Are you sure?");
+    }
+</script>

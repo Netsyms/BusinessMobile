@@ -1,7 +1,10 @@
-<br />
 <div class="app-dock-container">
     <div class="app-dock" id="app-dock">
-
+        <div style="margin-top: 50px;">
+            <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+            </svg>
+        </div>
     </div>
 </div>
 
@@ -11,7 +14,7 @@
             launchapp(id, api, url, icon, title);
         });
     }
-    
+
     function loadapps() {
         $.post(localStorage.getItem("portalurl"), {
             username: localStorage.getItem("username"),
@@ -19,6 +22,7 @@
             action: "listapps"
         }, function (data) {
             if (data.status === 'OK') {
+                $('#app-dock').html("");
                 Object.keys(data.apps).forEach(function (k) {
                     var app = data.apps[k];
                     var iconurl = app.icon;
@@ -29,11 +33,14 @@
                 });
             } else {
                 navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
+                openscreen("homeloaderror");
             }
         }, "json").fail(function () {
             navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
+            openscreen("homeloaderror");
         });
     }
-    
+
+    setnavbar("home");
     loadapps();
 </script>

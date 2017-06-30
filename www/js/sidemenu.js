@@ -47,7 +47,7 @@ $(document).ready(function () {
     var menucolor = $('.navbar').css('background-color');
     var textcolor = $('.navbar .navbar-nav > li > a').css('color');
     var logo = "%%LOGO%%";
-    $('body').append("<div id='swipe-nav'><div id='swipe-header' style='background-color: " + menucolor + "; color: " + textcolor + "'><a href='./app.php'><img id='swipe-appicon' src='" + logo + "' /></a> <div id='swipe-username'><i class='fa fa-user fa-fw'></i> " + username + "</div></div>\n<ul id='swipe-pages'>" + pages + "</ul></div>");
+    $('body').append("<div id='swipe-nav'><div id='swipe-header' style='background-color: " + menucolor + "; color: " + textcolor + "'><a href='./app.php'><img id='swipe-appicon' src='" + logo + "' /></a> <div id='swipe-username'><i class='fa fa-user fa-fw'></i> " + username + "</div></div>\n<ul id='swipe-pages'>" + pages + "</ul><ul><li><a onclick='quitapp()'><i class='fa fa-sign-out fa-fw'></i> Back to Menu</a></li></ul></div>");
     $('body').append("<div id='swipe-shader'></div>");
 
     $('button.navbar-toggle[data-toggle="collapse"]').click(togglemenu);
@@ -67,3 +67,7 @@ $(document).ready(function () {
         closemenu();
     });
 });
+
+function quitapp() {
+    parent.postMessage('quit','*');
+}

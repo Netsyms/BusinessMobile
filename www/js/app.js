@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     if (localStorage.getItem("setupcomplete")) {
         getuserinfo(function () {
-           openscreen("home");
+            openscreen("home");
         });
     } else {
         openscreen("setup1");
@@ -26,9 +26,11 @@ function getuserinfo(callback) {
             callback();
         } else {
             navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
+            openscreen("homeloaderror");
         }
     }, "json").fail(function () {
         navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
+        openscreen("homeloaderror");
     });
 }
 
@@ -73,6 +75,27 @@ function openfragment(fragment, target, effect) {
         });
     } else {
         $(target).load("views/" + fragment + ".html");
+    }
+}
+
+function setnavbar(type) {
+    var navbar = $('#navbar-header');
+    if (type == false) {
+        $('#navbar').css('display', 'none');
+        $('#content-zone').css('margin-top', '0px');
+    } else {
+        $('#navbar').css('display', 'initial');
+        $('#content-zone').css('margin-top', '75px');
+        switch (type) {
+            case "home":
+                navbar.html('<span class="navbar-brand" style="color: white;">Business</span><span class="navbar-brand pull-right" onclick="openscreen(\'settings\')"><img src="icons/ic_settings.svg" alt="" /></span>');
+                break;
+            case "settings":
+                navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'home\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand" style="color: white;" onclick="openscreen(\'home\')">Settings</span>');
+                break;
+            default:
+                navbar.html('<span class="navbar-brand" style="color: white;">Business</span>');
+        }
     }
 }
 

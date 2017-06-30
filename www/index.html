@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="css/font-awesome.min.css" />
         <link rel="stylesheet" href="css/material-color.min.css" />
         <link rel="stylesheet" href="css/app.css" />
+        <link rel="stylesheet" href="css/spinner.css" />
 
         <script src="cordova.js"></script>
         <script src="js/jquery-3.2.1.min.js"></script>
@@ -19,11 +20,25 @@
         <div id="modal-load-box" class="container" style='z-index: 1000;'>
 
         </div>
-        <div id="content-zone" class="container">
 
+        <nav class="navbar navbar-inverse navbar-fixed-top" id="navbar">
+            <div class="container-fluid">
+                <div class="navbar-header" id="navbar-header">
+                    <span class="navbar-brand" style="color: white;">Business</span>
+                </div>
+            </div>
+        </nav>
+
+        <div id="content-zone" class="container" style="margin-top: 75px;">
+            <div class="app-dock-container">
+                <div class="app-dock" id="app-dock">
+                    <div style="margin-top: 50px;">
+                        <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                        </svg>
+                    </div>
+                </div>
+            </div>
         </div>
-        <script>
-            
-        </script>
     </body>
 </html>
