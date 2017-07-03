@@ -8,11 +8,111 @@
             <br /><br />
             Open Portal on another device and go to your account settings.  Generate a mobile sync code, then press the button below to scan it.
         </p>
-        <div class="btn btn-primary" onclick="scanCode()"><i class="fa fa-qrcode"></i> Scan Code</div>
+        <span class="btn btn-primary" onclick="scanCode()" id="scancodebtn">
+            <i class="fa fa-qrcode"></i> Scan Code
+        </span>
+        <span class="btn btn-link" onclick="manualshow()" id="manualsetupbtn">
+            Manual Setup
+        </span>
+        <div id="manual_setup" class="well" style="display: none;">
+            <input type="text" id="username" class="form-control" placeholder="Username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" /> <br />
+            <input type="text" id="key" class="form-control" placeholder="Sync key" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" /> <br />
+            <div class="input-group" style="margin-left: -20px;">
+                <span class="input-group-addon" id="protocol-select">https://</span>
+                <input type="text" id="portalurl" class="form-control" placeholder="URL" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            </div> <br />
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="use-security" checked > Use secure connection
+                </label>
+            </div>
+            <br />
+            <div class="btn btn-primary" onclick="manualsetup()">
+                Continue
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
+    $('#use-security').click(function () {
+        if (this.checked) {
+            $('#protocol-select').text("https://");
+        } else {
+            $('#protocol-select').text("http://");
+        }
+    });
+
+    /* Detect if the user typed "http[s]://" into the URL box and correct for it */
+    $("#portalurl").blur(function () {
+        if ($('#portalurl').val().toLowerCase().startsWith("https://")) {
+            $('#portalurl').val($('#portalurl').val().replace(/https\:\/\//ig, ""));
+            $('#protocol-select').text("https://");
+            $('#use-security').prop('checked', true);
+        } else if ($('#portalurl').val().toLowerCase().startsWith("http://")) {
+            $('#portalurl').val($('#portalurl').val().replace(/http\:\/\//ig, ""));
+            $('#protocol-select').text("http://");
+            $('#use-security').prop('checked', false);
+        }
+    });
+
+    $("#key").on("keyup", function () {
+        if (window.getSelection().toString() !== '') {
+            return;
+        }
+        var text = $('#key').val().replace(/\s+/g, '');
+        var formatted = "";
+        for (var i = 1; i <= text.length; i++) {
+            formatted = formatted + text[i - 1];
+            if (i % 5 == 0 && i > 1 && i < text.length) {
+                // add a space every 5 characters,
+                // unless it's the first character
+                // or the last character
+                formatted = formatted + " ";
+            }
+        }
+        $('#key').val(formatted.toUpperCase());
+    });
+    
+    $('#username').on("keyup", function () {
+        $('#username').val($('#username').val().toLowerCase());
+    });
+
+    function manualsetup() {
+        if ($('#portalurl').val().toLowerCase().startsWith("http")) {
+            var portal = $('#portalurl').val();
+        } else {
+            var portal = $('#protocol-select').text() + $('#portalurl').val();
+        }
+        var username = $('#username').val();
+        var key = $('#key').val().replace(/\s+/g, '');
+        checkAndSave(portal, username, key);
+    }
+
+    function manualshow() {
+        $('#manual_setup').css('display', 'block');
+    }
+
+    function checkAndSave(portal, username, key) {
+        $.post(portal, {
+            username: username,
+            key: key,
+            action: "check_key"
+        }, function (data) {
+            if (data.status === 'OK') {
+                localStorage.setItem("username", username);
+                localStorage.setItem("portalurl", portal);
+                localStorage.setItem("key", key);
+                openscreen("setup2");
+            } else {
+                navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
+            }
+        }, "json").fail(function () {
+            navigator.notification.alert("Could not connect to the server.  Try again.", null, "Error", 'Dismiss');
+        });
+    }
+
+
     function scanCode() {
         try {
             cordova.plugins.barcodeScanner.scan(
@@ -27,22 +127,7 @@
                             var portal = parts[0].replace(/\\/g, "/");
                             var username = parts[1];
                             var key = parts[2];
-                            $.post(portal, {
-                                username: username,
-                                key: key,
-                                action: "check_key"
-                            }, function (data) {
-                                if (data.status === 'OK') {
-                                    localStorage.setItem("username", username);
-                                    localStorage.setItem("portalurl", portal);
-                                    localStorage.setItem("key", key);
-                                    openscreen("setup2");
-                                } else {
-                                    navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
-                                }
-                            }, "json").fail(function () {
-                                navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
-                            });
+                            checkAndSave(portal, username, key);
                         }
                     },
                     function (error) {
@@ -57,6 +142,6 @@
             navigator.notification.alert(ex.message, null, "Error", 'Dismiss');
         }
     }
-    
+
     setnavbar("home");
 </script>

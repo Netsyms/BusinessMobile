@@ -9,12 +9,6 @@
 </div>
 
 <script>
-    function openapp(id, api, url, icon, title) {
-        $('#content-zone').load("views/app.html", function () {
-            launchapp(id, api, url, icon, title);
-        });
-    }
-
     function loadapps() {
         $.post(localStorage.getItem("portalurl"), {
             username: localStorage.getItem("username"),
@@ -41,6 +35,10 @@
         });
     }
 
-    setnavbar("home");
-    loadapps();
+    if (localStorage.getItem('setupcomplete')) {
+        setnavbar("home");
+        loadapps();
+    } else {
+        openscreen("setup1");
+    }
 </script>

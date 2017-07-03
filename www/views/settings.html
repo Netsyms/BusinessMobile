@@ -1,7 +1,14 @@
 <div class="list-group">
+    <div class="list-group-item" onclick="openportal()">
+	<b>Open Portal</b>
+	<p>Manage your account.</p>
+    </div>
+</div>
+
+<div class="list-group">
     <div class="list-group-item" onclick="deleteall()">
 	<b>Log out and unpair</b>
-	<p>Forget all stored user data.  You will need to run the setup again.</p>
+	<p>Forget all stored user data and open the setup tool.</p>
     </div>
 </div>
 
@@ -24,5 +31,9 @@
 		    document.location.href = "index.html";
 		}, "App Reset", 'Continue');
 	}, "Are you sure?");
+    }
+    
+    function openportal() {
+        openapp("portal", "/mobile/index.php", localStorage.getItem("portalurl").replace("/mobile/index.php", ""), "/static/img/logo.svg", "Portal", false, true);
     }
 </script>

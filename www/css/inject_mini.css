@@ -1,0 +1,10 @@
+/*
+ A tiny bit of CSS to inject into apps even if injectcode = false.
+
+ This hides items in the app with the class mobile-app-hide.
+*/
+
+.mobile-app-hide {
+    display: none;
+    visibility: hidden;
+}

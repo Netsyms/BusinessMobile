@@ -14,6 +14,18 @@ $(document).ready(function () {
     }
 });
 
+document.addEventListener("deviceready", function () {
+    if (cordova.platformId == 'android') {
+        StatusBar.backgroundColorByHexString("#1976d2");
+    }
+}, false);
+
+/**
+ * Fetch user info (name, email, etc) from the server and save to the global 
+ * variable `userinfo`.
+ * @param function callback An optional function to run if/when the request 
+ * succeeds.
+ */
 function getuserinfo(callback) {
     $.post(localStorage.getItem("portalurl"), {
         username: localStorage.getItem("username"),
@@ -23,7 +35,9 @@ function getuserinfo(callback) {
     }, function (data) {
         if (data.status === 'OK') {
             userinfo = data.info;
-            callback();
+            if (typeof callback == 'function') {
+                callback();
+            }
         } else {
             navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
             openscreen("homeloaderror");
@@ -57,7 +71,6 @@ function openscreen(screenname, effect) {
         $('#content-zone').load("views/" + screenname + ".html");
     }
     currentscreen = screenname;
-    updateStatusBarColor();
 }
 
 function openfragment(fragment, target, effect) {
@@ -78,12 +91,26 @@ function openfragment(fragment, target, effect) {
     }
 }
 
-function setnavbar(type) {
+/**
+ * Set the navbar.
+ * @param String,boolean type false if no navbar, "home" for the home screen, 
+ * "settings" for settings, "app" for a custom title, or anything else for 
+ * a simple one.
+ * @param String title The title to show if type == "app"
+ * @returns {undefined}
+ */
+function setnavbar(type, title) {
     var navbar = $('#navbar-header');
     if (type == false) {
         $('#navbar').css('display', 'none');
         $('#content-zone').css('margin-top', '0px');
     } else {
+        if (cordova.platformId == 'android') {
+            StatusBar.backgroundColorByHexString("#1976d2");
+            window.plugins.headerColor.tint("#2196f3");
+        } else {
+            StatusBar.backgroundColorByHexString("#2196f3");
+        }
         $('#navbar').css('display', 'initial');
         $('#content-zone').css('margin-top', '75px');
         switch (type) {
@@ -93,10 +120,30 @@ function setnavbar(type) {
             case "settings":
                 navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'home\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand" style="color: white;" onclick="openscreen(\'home\')">Settings</span>');
                 break;
+            case "app":
+                navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'home\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand" style="color: white;" onclick="openscreen(\'home\')">' + title + '</span>');
+                break;
             default:
                 navbar.html('<span class="navbar-brand" style="color: white;">Business</span>');
         }
     }
+}
+
+/**
+ * Load the app.html view and open an app with native Android UI elements
+ * @param String id Application ID
+ * @param String api Path to the mobile API
+ * @param String url Base URL of the app
+ * @param String icon URL to the app icon
+ * @param String title Friendly app name
+ * @param boolean injectcode (optional, default true) Whether or not to inject UI modification code into the app
+ * @param boolean shownavbar (optional, default false) Whether or not to show the navbar at the top of the screen.
+ * @returns {undefined}
+ */
+function openapp(id, api, url, icon, title, injectcode, shownavbar) {
+    $('#content-zone').load("views/app.html", function () {
+        launchapp(id, api, url, icon, title, injectcode, shownavbar);
+    });
 }
 
 /**

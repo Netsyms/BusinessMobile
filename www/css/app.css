@@ -62,3 +62,7 @@ span.navbar-brand {
     height: 30px;
     margin-top: -4px;
 }
+
+#manual_setup {
+    margin-top: 15px;
+}

@@ -8,6 +8,11 @@
     visibility: hidden;
 }
 
+.mobile-app-hide {
+    display: none;
+    visibility: hidden;
+}
+
 @media screen and (max-width: 767px) {
     #navbar-collapse {
         display: none;

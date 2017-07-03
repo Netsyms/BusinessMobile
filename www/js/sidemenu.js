@@ -17,6 +17,29 @@
 /*
  * sidemenu.js
  */
+
+// This code from
+// https://stackoverflow.com/a/6177502
+$.cssHooks.backgroundColor = {
+    get: function(elem) {
+        if (elem.currentStyle)
+            var bg = elem.currentStyle["backgroundColor"];
+        else if (window.getComputedStyle)
+            var bg = document.defaultView.getComputedStyle(elem,
+                null).getPropertyValue("background-color");
+        if (bg.search("rgb") == -1)
+            return bg;
+        else {
+            bg = bg.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+            function hex(x) {
+                return ("0" + parseInt(x).toString(16)).slice(-2);
+            }
+            return "#" + hex(bg[1]) + hex(bg[2]) + hex(bg[3]);
+        }
+    }
+}
+
+
 function openmenu() {
     if ($('#swipe-nav').css('display') == 'none') {
         $('#swipe-shader').show("fade", {}, 300);
@@ -44,12 +67,14 @@ $(document).ready(function () {
     var user = $('#navbar-collapse .navbar-right').html();
     //$('body').append("<div id='swipe-nav'><div id='swipe-header'></div>\n<ul id='swipe-pages'>" + pages + "</ul>\n<ul id='swipe-user'>" + user + "</ul></div>");
     var username = "%%USERNAME%%";
-    var menucolor = $('.navbar').css('background-color');
+    var menucolor = $('.navbar').css('backgroundColor');
     var textcolor = $('.navbar .navbar-nav > li > a').css('color');
     var logo = "%%LOGO%%";
     $('body').append("<div id='swipe-nav'><div id='swipe-header' style='background-color: " + menucolor + "; color: " + textcolor + "'><a href='./app.php'><img id='swipe-appicon' src='" + logo + "' /></a> <div id='swipe-username'><i class='fa fa-user fa-fw'></i> " + username + "</div></div>\n<ul id='swipe-pages'>" + pages + "</ul><ul><li><a onclick='quitapp()'><i class='fa fa-sign-out fa-fw'></i> Back to Menu</a></li></ul></div>");
     $('body').append("<div id='swipe-shader'></div>");
-
+    
+    parent.postMessage("setcolor " + menucolor, "*");
+    
     $('button.navbar-toggle[data-toggle="collapse"]').click(togglemenu);
 
     $('#swipe-shader').click(togglemenu);

@@ -8,12 +8,15 @@
     "license": "netsyms-business-license",
     "dependencies": {
         "cordova-android": "^6.2.3",
+        "cordova-browser": "^4.1.0",
         "cordova-plugin-compat": "^1.1.0",
         "cordova-plugin-console": "git+https://github.com/apache/cordova-plugin-console.git",
         "cordova-plugin-device": "git+https://github.com/apache/cordova-plugin-device.git",
         "cordova-plugin-dialog": "0.0.1",
         "cordova-plugin-dialogs": "git+https://github.com/apache/cordova-plugin-dialogs.git",
+        "cordova-plugin-headercolor": "^1.0.0",
         "cordova-plugin-splashscreen": "git+https://github.com/apache/cordova-plugin-splashscreen.git",
+        "cordova-plugin-statusbar": "^2.2.3",
         "cordova-plugin-whitelist": "^1.3.2",
         "phonegap-plugin-barcodescanner": "^6.0.6"
     },
@@ -24,10 +27,13 @@
             "cordova-plugin-device": {},
             "cordova-plugin-whitelist": {},
             "cordova-plugin-dialogs": {},
-            "cordova-plugin-splashscreen": {}
+            "cordova-plugin-splashscreen": {},
+            "cordova-plugin-statusbar": {},
+            "cordova-plugin-headercolor": {}
         },
         "platforms": [
-            "android"
+            "android",
+            "browser"
         ]
     }
 }
