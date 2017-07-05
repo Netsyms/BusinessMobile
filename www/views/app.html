@@ -56,9 +56,10 @@
             openscreen("home");
         });
     }
-
+    
+    var scanningactive = false;
     window.addEventListener('message', function (event) {
-        console.log(event.data);
+        console.log("app event: " + event.data);
         if (event.data == "quit") {
             openscreen("home");
         } else if (event.data.startsWith("setcolor ")) {
@@ -74,9 +75,39 @@
             } else {
                 StatusBar.backgroundColorByHexString(color);
             }
+        } else if (event.data.startsWith("scancode ")) {
+            var callbackcode = event.data.split(" ").slice(1).join(" ");
+            console.log("got scancode " + callbackcode);
+            try {
+                if (scanningactive) {
+                    console.log("Scanner already active, ignoring request.");
+                    return;
+                }
+                scanningactive = true;
+                cordova.plugins.barcodeScanner.scan(
+                        function (result) {
+                            scanningactive = false;
+                            if (!result.cancelled) {
+                                var iframe = document.getElementById("appframe");
+                                iframe.contentWindow.postMessage("coderesult~|~" + callbackcode + "~|~" + result.text, "*");
+                            }
+                        },
+                        function (error) {
+                            scanningactive = false;
+                            navigator.notification.alert("Scanning failed: " + error, null, "Error", 'Dismiss');
+                        },
+                        {
+                            "showFlipCameraButton": true,
+                            "prompt": "Scan Code"
+                        }
+                );
+            } catch (ex) {
+                scanningactive = false;
+                navigator.notification.alert(ex.message, null, "Error", 'Dismiss');
+            }
         }
     }, false);
-    
+
     if (userinfo == null) {
         getuserinfo();
     }

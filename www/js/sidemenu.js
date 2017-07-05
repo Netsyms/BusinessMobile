@@ -91,8 +91,25 @@ $(document).ready(function () {
     Hammer(document.body).on("swipeleft", function (e) {
         closemenu();
     });
+    
+    window.addEventListener('message', function (event) {
+        if (event.data.startsWith("coderesult~|~")) {
+            var data = event.data.split("~|~");
+            var ref = data[1];
+            var code = data[2];
+            $(ref).val(code);
+            $(ref).trigger("input");
+            $(ref).trigger("change");
+            console.log("app: received " + event.data);
+        }
+    });
 });
 
 function quitapp() {
     parent.postMessage('quit','*');
+}
+
+function scancode(refstring) {
+    console.log("app: sent scancode " + refstring);
+    parent.postMessage('scancode ' + refstring, "*");
 }
