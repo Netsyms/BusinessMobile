@@ -16,6 +16,6 @@ Access all features of all Business Apps from one place.
 **Barcode Scanning**  
 Use your device camera to scan barcodes into BinStack and other apps.
 
-**Secure**
+**Secure**  
 If the device is lost, Apps access can be revoked from Portal by deleting the 
 pairing code.
