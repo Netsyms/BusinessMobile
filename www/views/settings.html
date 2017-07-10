@@ -28,6 +28,18 @@
     </div>
 </div>
 
+<div class="list-group">
+    <div class="list-group-item">
+        <span id="app_name">Netsyms Business Apps for Mobile</span> v<span id="app_version">1.x</span>
+        <br />
+        Copyright &copy; 2017 Netsyms Technologies (https://netsyms.com)
+        <br />
+        <span id="app_package">com.netsyms.BusinessMobile</span>
+        <br />
+        build #<span id="app_version_code">1xxxx</span>
+    </div>
+</div>
+
 <script>
     setnavbar("settings");
 
@@ -56,7 +68,7 @@
     function openportal() {
         openapp("portal", "/mobile/index.php", localStorage.getItem("portalurl").replace("/mobile/index.php", ""), "/static/img/logo.svg", "Portal", false, true);
     }
-    
+
     function toggleAnimations() {
         if (localStorage.getItem("animations") === null || localStorage.getItem("animations") === "true") {
             localStorage.setItem("animations", "false");
@@ -101,8 +113,18 @@
             }
         }, "Update Password", ["Save", "Cancel"]);
     }
-    
+
     if (localStorage.getItem("animations") === "false") {
         $('#animations_offon_label').text("on");
     }
+    
+    cordova.getAppVersion.getVersionNumber(function (version) {
+        $('#app_version').text(version);
+    });
+    cordova.getAppVersion.getPackageName(function (package) {
+        $('#app_package').text(package);
+    });
+    cordova.getAppVersion.getVersionCode(function (version) {
+        $('#app_version_code').text(version);
+    });
 </script>

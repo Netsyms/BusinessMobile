@@ -8,6 +8,7 @@
     "license": "netsyms-business-license",
     "dependencies": {
         "cordova-android": "^6.2.3",
+        "cordova-plugin-app-version": "^0.1.9",
         "cordova-plugin-compat": "^1.1.0",
         "cordova-plugin-console": "git+https://github.com/apache/cordova-plugin-console.git",
         "cordova-plugin-device": "git+https://github.com/apache/cordova-plugin-device.git",
@@ -30,7 +31,8 @@
             "cordova-plugin-splashscreen": {},
             "cordova-plugin-statusbar": {},
             "cordova-plugin-headercolor": {},
-            "cordova-plugin-inappbrowser": {}
+            "cordova-plugin-inappbrowser": {},
+            "cordova-plugin-app-version": {}
         },
         "platforms": [
             "android"

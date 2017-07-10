@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.netsyms.BusinessMobile" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.netsyms.BusinessMobile" version="1.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Business</name>
     <description>
         Mobile client for the Netsyms Business Apps.
@@ -59,6 +59,7 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="AutoHideSplashScreen" value="false" />
     <engine name="android" spec="^6.2.3" />
+    <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-console" spec="git+https://github.com/apache/cordova-plugin-console.git" />
     <plugin name="cordova-plugin-device" spec="git+https://github.com/apache/cordova-plugin-device.git" />
     <plugin name="cordova-plugin-dialogs" spec="git+https://github.com/apache/cordova-plugin-dialogs.git" />
