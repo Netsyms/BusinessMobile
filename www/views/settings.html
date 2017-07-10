@@ -19,24 +19,27 @@
 <div class="list-group">
     <div class="list-group-item" onclick="toggleAnimations()">
         <b>Turn animations <span id="animations_offon_label">off</span></b>
+        <p>Disable transitions and animations on slow devices or to save battery life.</p>
+    </div>
+</div>
+
+<div class="list-group">
+    <div class="list-group-item">
+        <b><span id="app_name">Netsyms Business Apps for Mobile</span> v<span id="app_version">1.x</span></b>
+        <br />
+        Copyright &copy; 2017 Netsyms Technologies.  Some rights reserved.
+        <br />
+        <span style="text-decoration: underline;" onclick="window.open('https://netsyms.com/?pk_campaign=BusinessMobile-InAppBrowser', '_system', '');">https://netsyms.com</span>
+        <br />
+        <span id="app_package">com.netsyms.BusinessMobile</span>
+        <br />
+        build #<span id="app_version_code">1xxxx</span>
     </div>
     <div class="list-group-item" onclick="openscreen('credits', 'FADE')">
         <b>Credits and Open Source</b>
     </div>
     <div class="list-group-item" onclick="cordova.InAppBrowser.open('https://biz.netsyms.com/mobile-privacy-policy/', '_blank', 'location=yes');">
         <b>Privacy Policy</b>
-    </div>
-</div>
-
-<div class="list-group">
-    <div class="list-group-item">
-        <span id="app_name">Netsyms Business Apps for Mobile</span> v<span id="app_version">1.x</span>
-        <br />
-        Copyright &copy; 2017 Netsyms Technologies (https://netsyms.com)
-        <br />
-        <span id="app_package">com.netsyms.BusinessMobile</span>
-        <br />
-        build #<span id="app_version_code">1xxxx</span>
     </div>
 </div>
 
@@ -117,7 +120,7 @@
     if (localStorage.getItem("animations") === "false") {
         $('#animations_offon_label').text("on");
     }
-    
+
     cordova.getAppVersion.getVersionNumber(function (version) {
         $('#app_version').text(version);
     });
