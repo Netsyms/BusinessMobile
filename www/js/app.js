@@ -1,5 +1,13 @@
 userinfo = null;
-$(document).ready(function () {
+
+document.addEventListener("deviceready", function () {
+    if (cordova.platformId == 'android') {
+        StatusBar.backgroundColorByHexString("#1976d2");
+    }
+
+    // Enable/disable jQuery animations depending on user preference
+    $.fx.off = !(localStorage.getItem("animations") === null || localStorage.getItem("animations") === "true");
+
     /* Fade out alerts */
     $(".alert .close").click(function (e) {
         $(this).parent().fadeOut("slow");
@@ -12,12 +20,7 @@ $(document).ready(function () {
     } else {
         openscreen("setup1");
     }
-});
-
-document.addEventListener("deviceready", function () {
-    if (cordova.platformId == 'android') {
-        StatusBar.backgroundColorByHexString("#1976d2");
-    }
+    setTimeout(navigator.splashscreen.hide, 1000);
 }, false);
 
 /**
@@ -56,9 +59,9 @@ function getuserinfo(callback) {
  */
 function openscreen(screenname, effect) {
     if (effect === 'FADE') {
-        $('#content-zone').fadeOut('slow', function () {
+        $('#content-zone').fadeOut(300, function () {
             $('#content-zone').load("views/" + screenname + ".html", function () {
-                $('#content-zone').fadeIn('slow');
+                $('#content-zone').fadeIn(300);
             });
         });
     } else if (effect === 'SLIDE') {
@@ -97,9 +100,10 @@ function openfragment(fragment, target, effect) {
  * "settings" for settings, "app" for a custom title, or anything else for 
  * a simple one.
  * @param String title The title to show if type == "app"
+ * @param String returnscreen Where to go back to.  Defaults to "home".
  * @returns {undefined}
  */
-function setnavbar(type, title) {
+function setnavbar(type, title, returnscreen) {
     var navbar = $('#navbar-header');
     if (type == false) {
         $('#navbar').css('display', 'none');
@@ -113,15 +117,21 @@ function setnavbar(type, title) {
         }
         $('#navbar').css('display', 'initial');
         $('#content-zone').css('margin-top', '75px');
+        if (returnscreen === undefined) {
+            returnscreen = "home";
+            _returnscreen = null;
+        } else {
+            _returnscreen = returnscreen;
+        }
         switch (type) {
             case "home":
-                navbar.html('<span class="navbar-brand" style="color: white;">Business</span><span class="navbar-brand pull-right" onclick="openscreen(\'settings\')"><img src="icons/ic_settings.svg" alt="" /></span>');
+                navbar.html('<span class="navbar-brand" style="color: white;">Business</span><span class="navbar-brand pull-right" onclick="openscreen(\'settings\', \'FADE\')"><img src="icons/ic_settings.svg" alt="" /></span>');
                 break;
             case "settings":
-                navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'home\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand" style="color: white;" onclick="openscreen(\'home\')">Settings</span>');
+                navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'home\', \'FADE\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand" style="color: white;" onclick="openscreen(\'home\')">Settings</span>');
                 break;
             case "app":
-                navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'home\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand" style="color: white;" onclick="openscreen(\'home\')">' + title + '</span>');
+                navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'home\', \'FADE\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand" style="color: white;" onclick="openscreen(\'' + returnscreen + '\')">' + title + '</span>');
                 break;
             default:
                 navbar.html('<span class="navbar-brand" style="color: white;">Business</span>');
@@ -141,8 +151,12 @@ function setnavbar(type, title) {
  * @returns {undefined}
  */
 function openapp(id, api, url, icon, title, injectcode, shownavbar) {
-    $('#content-zone').load("views/app.html", function () {
-        launchapp(id, api, url, icon, title, injectcode, shownavbar);
+    $('#content-zone').fadeOut(300, function () {
+        $('#content-zone').load("views/app.html", function () {
+            $('#content-zone').fadeIn(300, function () {
+                launchapp(id, api, url, icon, title, injectcode, shownavbar);
+            });
+        });
     });
 }
 
@@ -168,9 +182,22 @@ function closemodal(modalselector) {
     $(modalselector).modal(hide);
 }
 
+function restartApplication() {
+    navigator.splashscreen.show();
+    // We're doing the timeout so we don't run afoul of server-side rate limiting
+    setTimeout(function () {
+        window.location = "index.html";
+    }, 3000);
+}
+
 // Handle back button to close things
 document.addEventListener("backbutton", function (event) {
     if (localStorage.getItem("setupcomplete")) {
-        openscreen("home");
+        if (_returnscreen != null) {
+            openscreen(_returnscreen, "FADE");
+            _returnscreen = null;
+        } else {
+            openscreen("home", "FADE");
+        }
     }
 }, false);

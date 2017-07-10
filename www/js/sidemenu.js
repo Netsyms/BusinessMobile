@@ -63,6 +63,7 @@ function togglemenu() {
 }
 
 $(document).ready(function () {
+    $.fx.off = %%JQUERYFXOFF%%;
     var pages = $('#navbar-collapse .navbar-nav').html();
     var user = $('#navbar-collapse .navbar-right').html();
     //$('body').append("<div id='swipe-nav'><div id='swipe-header'></div>\n<ul id='swipe-pages'>" + pages + "</ul>\n<ul id='swipe-user'>" + user + "</ul></div>");

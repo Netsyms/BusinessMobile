@@ -32,6 +32,7 @@
                         $.get("css/sidemenu.css", function (style) {
                             $('#appframe').contents().find('head').append("<style>" + style + "</style>");
                             $.get("js/sidemenu.js", function (script) {
+                                script = script.replace("%%JQUERYFXOFF%%", !(localStorage.getItem("animations") === null || localStorage.getItem("animations") === "true"));
                                 script = script.replace("%%USERNAME%%", userinfo.realname);
                                 script = script.replace("%%LOGO%%", icon);
                                 $('#appframe').contents().find('body').append("<script>" + script + "<\/script>");

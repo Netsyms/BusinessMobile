@@ -1,14 +1,30 @@
 <div class="list-group">
     <div class="list-group-item" onclick="openportal()">
-	<b>Open Portal</b>
-	<p>Manage your account.</p>
+        <b>Open Portal</b>
+        <p>Manage your account.</p>
     </div>
 </div>
 
 <div class="list-group">
+    <div class="list-group-item" onclick="updatepassword()">
+        <b>Update Password</b>
+        <p>Enter your new password if you changed it from Portal.</p>
+    </div>
     <div class="list-group-item" onclick="deleteall()">
-	<b>Log out and unpair</b>
-	<p>Forget all stored user data and open the setup tool.</p>
+        <b>Log out</b>
+        <p>Forget all cached account data (including sync key) and open the setup tool.</p>
+    </div>
+</div>
+
+<div class="list-group">
+    <div class="list-group-item" onclick="toggleAnimations()">
+        <b>Turn animations <span id="animations_offon_label">off</span></b>
+    </div>
+    <div class="list-group-item" onclick="openscreen('credits', 'FADE')">
+        <b>Credits and Open Source</b>
+    </div>
+    <div class="list-group-item" onclick="cordova.InAppBrowser.open('https://biz.netsyms.com/mobile-privacy-policy/', '_blank', 'location=yes');">
+        <b>Privacy Policy</b>
     </div>
 </div>
 
@@ -16,24 +32,77 @@
     setnavbar("settings");
 
     function deleteall() {
-	navigator.notification.confirm("Really wipe user data?  You will need to resync the app with Portal to use it again.", function (result) {
-		if (result != 1) {
-			return;
-		}
-		// Wipe localStorage
-		localStorage.removeItem("setupcomplete");
-		localStorage.removeItem("username");
-		localStorage.removeItem("portalurl");
-		localStorage.removeItem("key");
-		localStorage.clear();
-		// force-reload app
-		navigator.notification.alert("Connection data and credentials erased.", function () {
-		    document.location.href = "index.html";
-		}, "App Reset", 'Continue');
-	}, "Are you sure?");
+        navigator.notification.confirm("Really wipe user data?  You will need to resync the app with Portal to use it again.", function (result) {
+            if (result != 1) {
+                return;
+            }
+            // Wipe localStorage
+            localStorage.removeItem("setupcomplete");
+            localStorage.removeItem("username");
+            localStorage.removeItem("portalurl");
+            localStorage.removeItem("key");
+            localStorage.clear();
+            // force-reload app
+            navigator.notification.alert("Connection data and credentials erased.", function () {
+                restartApplication();
+            }, "App Reset", 'Continue');
+        }, "Are you sure?");
     }
-    
+
+    /**
+     * Open Portal in an iframe.
+     * @returns {undefined}
+     */
     function openportal() {
         openapp("portal", "/mobile/index.php", localStorage.getItem("portalurl").replace("/mobile/index.php", ""), "/static/img/logo.svg", "Portal", false, true);
+    }
+    
+    function toggleAnimations() {
+        if (localStorage.getItem("animations") === null || localStorage.getItem("animations") === "true") {
+            localStorage.setItem("animations", "false");
+            $.fx.off = true;
+            $('#animations_offon_label').text("on");
+            navigator.notification.alert("Animations turned off.", null, "Setting updated", "Dismiss");
+        } else {
+            localStorage.setItem("animations", "true");
+            $.fx.off = false;
+            $('#animations_offon_label').text("off");
+            navigator.notification.alert("Animations turned on.", null, "Setting updated", "Dismiss");
+        }
+    }
+
+    /**
+     * Prompts the user to enter their password, then checks the password and 
+     * saves or displays an error.
+     * @returns {undefined}
+     */
+    function updatepassword() {
+        navigator.notification.prompt("Re-enter your password.", function (results) {
+            if (results.buttonIndex == 1) {
+                $.post(localStorage.getItem("portalurl"), {
+                    username: localStorage.getItem("username"),
+                    key: localStorage.getItem("key"),
+                    password: results.input1,
+                    action: "check_password"
+                }, function (data) {
+                    if (data.status === 'OK') {
+                        localStorage.setItem("password", results.input1);
+                        localStorage.setItem("setupcomplete", true);
+                        navigator.notification.alert("Saved password updated.", function () {
+                            // Reload app just to be safe
+                            restartApplication();
+                        }, "Success", 'Continue');
+                    } else {
+                        navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
+                    }
+                }, "json").fail(function () {
+                    navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
+                });
+            }
+        }, "Update Password", ["Save", "Cancel"]);
+    }
+    
+    if (localStorage.getItem("animations") === "false") {
+        $('#animations_offon_label').text("on");
     }
 </script>
