@@ -1,0 +1,61 @@
+<br />
+
+<div class="alert alert-blue">This tool scans for Business Apps servers on the local network.  Tap on a server to view it in a web browser.</div>
+<div class="list-group" id="zero-list">
+    <div class="list-group-item" id="searching-message">
+        <i class="fa fa-spinner fa-spin"></i> Searching...
+    </div>
+</div>
+<div class="btn btn-primary" onclick="stopScanning(); scanZeroconf();"><i class="fa fa-refresh"></i> Rescan</div>
+
+
+<script>
+    var zeroconf = cordova.plugins.zeroconf;
+    zeroconf.registerAddressFamily = 'ipv4'; // or 'ipv6' ('any' by default)
+    zeroconf.watchAddressFamily = 'ipv4'; // or 'ipv6' ('any' by default)
+
+    function scanZeroconf() {
+        $("#searching-message").css('display', 'block');
+        zeroconf.watch('_http._tcp.', 'local.', function (result) {
+            var action = result.action;
+            var service = result.service;
+            // Ignore other services
+            if (typeof service.txtRecord.appid !== 'undefined' && service.txtRecord.appid == "bizappserver") {
+                var ipaddr = service.ipv4Addresses[0];
+                var divid = "#server" + ipaddr.replace(/\./gi, '');
+                if (action == 'added') {
+                    console.log('service added', service);
+                    var model = service.txtRecord.model;
+                    if ((service.txtRecord.webprotocol == "http" || service.txtRecord.webprotocol == "https") && Number.isInteger(service.port)) {
+                        var url = service.txtRecord.webprotocol
+                                + "://"
+                                + ipaddr
+                                + (service.port == 80 || service.port == 443 ? "" : ":" + service.port)
+                                + service.txtRecord.webpath;
+                        var itemcontent = "<b>" + ipaddr + "</b><br />URL: " + url + "<br />Model: " + model;
+                        if (document.getElementById(divid) == null) {
+                            $('#zero-list').append("<div class=\"list-group-item\" id=\"" + divid + "\">" + itemcontent + "</div>");
+                        } else {
+                            $(divid).html(itemcontent);
+                        }
+                        document.getElementById(divid).onclick = function () {
+                            window.open(url, "_system");
+                        }
+                    }
+                } else {
+                    console.log('service removed', service);
+                    $(divid).remove();
+                }
+            }
+        });
+        setTimeout(stopScanning, 10 * 1000);
+    }
+
+    function stopScanning() {
+        zeroconf.unwatch('_http._tcp.', 'local.');
+        $("#searching-message").css('display', 'none');
+    }
+
+    setnavbar("app", "Server Locator", "settings");
+    scanZeroconf();
+</script>

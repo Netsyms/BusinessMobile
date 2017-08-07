@@ -17,6 +17,13 @@
 </div>
 
 <div class="list-group">
+    <div class="list-group-item" onclick="openscreen('zeroconf', 'FADE')">
+        <b>Server Locator</b>
+        <p>Scan the local network for Business Apps services.</p>
+    </div>
+</div>
+
+<div class="list-group">
     <div class="list-group-item">
         <b><span id="app_name">Netsyms Business Apps for Mobile</span> v<span id="app_version">1.x</span></b>
         <br />
@@ -40,7 +47,7 @@
     setnavbar("settings");
 
     function deleteall() {
-        navigator.notification.confirm("Really wipe user data?  You will need to resync the app with Portal to use it again.", function (result) {
+        navigator.notification.confirm("Really wipe user data?  You will need to resync the app with AccountHub to use it again.", function (result) {
             if (result != 1) {
                 return;
             }
