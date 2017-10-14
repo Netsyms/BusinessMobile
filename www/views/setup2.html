@@ -16,7 +16,7 @@
 
 <script>
     function savePassword() {
-        $.post(localStorage.getItem("portalurl"), {
+        $.post(localStorage.getItem("syncurl"), {
             username: localStorage.getItem("username"),
             key: localStorage.getItem("key"),
             password: $('#passbox').val(),

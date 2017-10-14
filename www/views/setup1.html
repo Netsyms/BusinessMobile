@@ -19,7 +19,7 @@
             <input type="text" id="key" class="form-control" placeholder="Sync key" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" /> <br />
             <div class="input-group" style="margin-left: -20px;">
                 <span class="input-group-addon" id="protocol-select">https://</span>
-                <input type="text" id="portalurl" class="form-control" placeholder="URL" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                <input type="text" id="syncurl" class="form-control" placeholder="URL" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
             </div> <br />
             <div class="checkbox">
                 <label>
@@ -44,13 +44,13 @@
     });
 
     /* Detect if the user typed "http[s]://" into the URL box and correct for it */
-    $("#portalurl").blur(function () {
-        if ($('#portalurl').val().toLowerCase().startsWith("https://")) {
-            $('#portalurl').val($('#portalurl').val().replace(/https\:\/\//ig, ""));
+    $("#syncurl").blur(function () {
+        if ($('#syncurl').val().toLowerCase().startsWith("https://")) {
+            $('#syncurl').val($('#syncurl').val().replace(/https\:\/\//ig, ""));
             $('#protocol-select').text("https://");
             $('#use-security').prop('checked', true);
-        } else if ($('#portalurl').val().toLowerCase().startsWith("http://")) {
-            $('#portalurl').val($('#portalurl').val().replace(/http\:\/\//ig, ""));
+        } else if ($('#syncurl').val().toLowerCase().startsWith("http://")) {
+            $('#syncurl').val($('#syncurl').val().replace(/http\:\/\//ig, ""));
             $('#protocol-select').text("http://");
             $('#use-security').prop('checked', false);
         }
@@ -79,10 +79,10 @@
     });
 
     function manualsetup() {
-        if ($('#portalurl').val().toLowerCase().startsWith("http")) {
-            var portal = $('#portalurl').val();
+        if ($('#syncurl').val().toLowerCase().startsWith("http")) {
+            var portal = $('#syncurl').val();
         } else {
-            var portal = $('#protocol-select').text() + $('#portalurl').val();
+            var portal = $('#protocol-select').text() + $('#syncurl').val();
         }
         var username = $('#username').val();
         var key = $('#key').val().replace(/\s+/g, '');
@@ -101,7 +101,7 @@
         }, function (data) {
             if (data.status === 'OK') {
                 localStorage.setItem("username", username);
-                localStorage.setItem("portalurl", portal);
+                localStorage.setItem("syncurl", portal);
                 localStorage.setItem("key", key);
                 openscreen("setup2");
             } else {

@@ -30,7 +30,7 @@ document.addEventListener("deviceready", function () {
  * succeeds.
  */
 function getuserinfo(callback) {
-    $.post(localStorage.getItem("portalurl"), {
+    $.post(localStorage.getItem("syncurl"), {
         username: localStorage.getItem("username"),
         key: localStorage.getItem("key"),
         password: localStorage.getItem("password"),

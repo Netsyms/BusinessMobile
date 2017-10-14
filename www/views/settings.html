@@ -54,7 +54,7 @@
             // Wipe localStorage
             localStorage.removeItem("setupcomplete");
             localStorage.removeItem("username");
-            localStorage.removeItem("portalurl");
+            localStorage.removeItem("syncurl");
             localStorage.removeItem("key");
             localStorage.clear();
             // force-reload app
@@ -62,14 +62,6 @@
                 restartApplication();
             }, "App Reset", 'Continue');
         }, "Are you sure?");
-    }
-
-    /**
-     * Open Portal in an iframe.
-     * @returns {undefined}
-     */
-    function openportal() {
-        openapp("portal", "/mobile/index.php", localStorage.getItem("portalurl").replace("/mobile/index.php", ""), "/static/img/logo.svg", "Portal", false, true);
     }
 
     function toggleAnimations() {
@@ -94,7 +86,7 @@
     function updatepassword() {
         navigator.notification.prompt("Re-enter your password.", function (results) {
             if (results.buttonIndex == 1) {
-                $.post(localStorage.getItem("portalurl"), {
+                $.post(localStorage.getItem("syncurl"), {
                     username: localStorage.getItem("username"),
                     key: localStorage.getItem("key"),
                     password: results.input1,

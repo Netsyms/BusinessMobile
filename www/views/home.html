@@ -10,7 +10,7 @@
 
 <script>
     function loadapps() {
-        $.post(localStorage.getItem("portalurl"), {
+        $.post(localStorage.getItem("syncurl"), {
             username: localStorage.getItem("username"),
             key: localStorage.getItem("key"),
             action: "listapps"
