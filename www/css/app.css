@@ -38,7 +38,11 @@ html, body {
 
 .app-dock-item p img {
     width: 80px;
+    height: 80px;
     display: block;
+    background: url(../img/app-icon-bg.svg) no-repeat;
+    background-size: 90%;
+    background-position: 50%;
     margin: 0 auto;
 }
 
@@ -49,20 +53,29 @@ html, body {
 
 span.navbar-brand {
     color: white;
+    margin-right: 0px;
+    height: 30px;
+    margin-top: -4px;
+    font-size: 20px;
+    margin-left: 5px;
 }
 
 .navbar-brand.pull-left img {
     margin-right: -10px;
     height: 30px;
     margin-top: -4px;
+    margin-left: -4px;
 }
 
 .navbar-brand.pull-right img {
-    margin-right: 6px;
     height: 30px;
     margin-top: -4px;
 }
 
 #manual_setup {
     margin-top: 15px;
+}
+
+#navbar {
+    min-height: 56px;
 }

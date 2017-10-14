@@ -23,7 +23,7 @@
                     if (!app.icon.startsWith("http")) {
                         iconurl = app.url + app.icon;
                     }
-                    $('#app-dock').append("<div class=\"app-dock-item\" onclick=\"openapp('" + k + "', '" + app.mobileapi + "', '" + app.url + "', '" + iconurl + "', '" + app.title + "')\"><p><img src=\"" + iconurl + "\" class=\"img-responsive app-icon\" /><span>" + app.title + "</span></p></div>");
+                    $("<div class=\"app-dock-item\" onclick=\"openapp('" + k + "', '" + app.mobileapi + "', '" + app.url + "', '" + iconurl + "', '" + app.title + "')\"><p><img src=\"" + iconurl + "\" class=\"img-responsive app-icon\" /><span>" + app.title + "</span></p></div>").hide().appendTo("#app-dock").fadeIn(200);
                 });
             } else {
                 navigator.notification.alert(data.msg, null, "Error", 'Dismiss');

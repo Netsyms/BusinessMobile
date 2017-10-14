@@ -123,19 +123,22 @@ function setnavbar(type, title, returnscreen) {
         } else {
             _returnscreen = returnscreen;
         }
-        switch (type) {
-            case "home":
-                navbar.html('<span class="navbar-brand" style="color: white;">Business</span><span class="navbar-brand pull-right" onclick="openscreen(\'settings\', \'FADE\')"><img src="icons/ic_settings.svg" alt="" /></span>');
-                break;
-            case "settings":
-                navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'home\', \'FADE\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand" style="color: white;" onclick="openscreen(\'home\')">Settings</span>');
-                break;
-            case "app":
-                navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'home\', \'FADE\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand" style="color: white;" onclick="openscreen(\'' + returnscreen + '\')">' + title + '</span>');
-                break;
-            default:
-                navbar.html('<span class="navbar-brand" style="color: white;">Business</span>');
-        }
+        navbar.fadeOut(150, function () {
+            switch (type) {
+                case "home":
+                    navbar.html('<span class="navbar-brand" style="color: white;">Business</span><span class="navbar-brand pull-right" onclick="openscreen(\'settings\', \'FADE\')"><img src="icons/ic_settings.svg" alt="" /></span>');
+                    break;
+                case "settings":
+                    navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'home\', \'FADE\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand navbar-title" style="color: white;" onclick="openscreen(\'home\', \'FADE\')">Settings</span>');
+                    break;
+                case "app":
+                    navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'' + returnscreen + '\', \'FADE\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand navbar-title" style="color: white;" onclick="openscreen(\'' + returnscreen + '\', \'FADE\')">' + title + '</span>');
+                    break;
+                default:
+                    navbar.html('<span class="navbar-brand" style="color: white;">Business</span>');
+            }
+            navbar.fadeIn(150);
+        });
     }
 }
 

@@ -21,6 +21,22 @@
     display: initial;
 }
 
+.navbar, .navbar-brand {
+    min-height: 56px;
+    height: 56px;
+}
+
+.navbar-brand {
+    font-size: 20px;
+    margin-top: -4px;
+}
+
+.navbar-toggle {
+    border: 0px solid white;
+    margin-top: 11px;
+    margin-bottom: 11px;
+}
+
 @media screen and (max-width: 767px) {
     #navbar-collapse {
         display: none;
