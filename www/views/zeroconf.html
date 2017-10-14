@@ -1,3 +1,21 @@
+<!--
+Sample avahi-daemon configuration for server detection:
+/etc/avahi/services/bizapps.service
+
+<?xml version="1.0" standalone='no'?>
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+ <name>BizApps</name>
+  <service>
+   <type>_http._tcp</type>
+   <port>80</port>
+   <txt-record>appid=bizappserver</txt-record>
+   <txt-record>webprotocol=http</txt-record>
+   <txt-record>webpath=/accounthub</txt-record>
+   <txt-record>model=other</txt-record>
+  </service>
+</service-group>
+-->
 <br />
 
 <div class="alert alert-blue">This tool scans for Business Apps servers on the local network.  Tap on a server to view it in a web browser.  Note: Cloud installations will not appear here.</div>
@@ -10,7 +28,6 @@
     </div>
 </div>
 <div class="btn btn-primary" onclick="stopScanning(); scanZeroconf();"><i class="fa fa-refresh"></i> Rescan</div>
-
 
 <script>
     var zeroconf = cordova.plugins.zeroconf;
