@@ -1,9 +1,12 @@
 <br />
 
-<div class="alert alert-blue">This tool scans for Business Apps servers on the local network.  Tap on a server to view it in a web browser.</div>
+<div class="alert alert-blue">This tool scans for Business Apps servers on the local network.  Tap on a server to view it in a web browser.  Note: Cloud installations will not appear here.</div>
 <div class="list-group" id="zero-list">
     <div class="list-group-item" id="searching-message">
         <i class="fa fa-spinner fa-spin"></i> Searching...
+    </div>
+    <div class="list-group-item" id="not-found-message" style="display: none;">
+        <i class="fa fa-search"></i> No services found on local network.
     </div>
 </div>
 <div class="btn btn-primary" onclick="stopScanning(); scanZeroconf();"><i class="fa fa-refresh"></i> Rescan</div>
@@ -16,6 +19,7 @@
 
     function scanZeroconf() {
         $("#searching-message").css('display', 'block');
+        $("#not-found-message").css('display', 'none');
         zeroconf.watch('_http._tcp.', 'local.', function (result) {
             var action = result.action;
             var service = result.service;
@@ -32,9 +36,9 @@
                                 + ipaddr
                                 + (service.port == 80 || service.port == 443 ? "" : ":" + service.port)
                                 + service.txtRecord.webpath;
-                        var itemcontent = "<b>" + ipaddr + "</b><br />URL: " + url + "<br />Model: " + model;
+                        var itemcontent = "<b>" + $('<span>').text(ipaddr).html() + "</b><br />URL: " + $('<span>').text(url).html() + "<br />Model: " + $('<span>').text(model).html();
                         if (document.getElementById(divid) == null) {
-                            $('#zero-list').append("<div class=\"list-group-item\" id=\"" + divid + "\">" + itemcontent + "</div>");
+                            $('#zero-list').append("<div class=\"list-group-item\" id=\"" + divid + "\" data-zeroconf=\"1\">" + itemcontent + "</div>");
                         } else {
                             $(divid).html(itemcontent);
                         }
@@ -54,6 +58,9 @@
     function stopScanning() {
         zeroconf.unwatch('_http._tcp.', 'local.');
         $("#searching-message").css('display', 'none');
+        if ($(".list-group-item[data-zeroconf]").length != true) {
+            $("#not-found-message").css('display', 'block');
+        }
     }
 
     setnavbar("app", "Server Locator", "settings");
