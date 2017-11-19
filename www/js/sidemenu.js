@@ -104,6 +104,12 @@ $(document).ready(function () {
             console.log("app: received " + event.data);
         }
     });
+    
+    setInterval(function () {
+        $.getJSON("mobile/index.php", {action: "ping"}, function (d) {
+            console.log("app: keepalive ping " + d.status);
+        });
+    }, 1000 * 60);
 });
 
 function quitapp() {
