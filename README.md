@@ -3,6 +3,8 @@ Business Mobile
 
 A mobile app for easy and secure access to the Business Apps on the go.
 
+https://netsyms.biz/apps/bizmobile
+
 Features
 --------
 
