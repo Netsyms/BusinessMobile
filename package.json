@@ -1,7 +1,7 @@
 {
     "name": "com.netsyms.BusinessMobile",
     "displayName": "Business for Mobile",
-    "version": "1.3",
+    "version": "1.4",
     "description": "Mobile client for the Netsyms Business Apps.",
     "main": "index.html",
     "author": "Netsyms Technologies",
