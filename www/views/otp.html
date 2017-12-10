@@ -1,0 +1,73 @@
+<div class="progress">
+    <div class="progress-bar" id="countdown" style="width: 0%;"></div>
+</div>
+<div id="nokeys">
+    <div class="app-dock-container">
+        <div class="app-dock" id="app-dock">
+            <div style="margin-top: 50px; text-align: center; font-size: 120%;">
+                <img src="img/nokeys.svg" alt="" style="max-width: 80%; max-height: 33%;" />
+                <br /><br />
+                You haven't added any authentication keys yet.  Press the <i class="fa fa-plus"></i> icon to add one.
+            </div>
+        </div>
+    </div>
+</div>
+<div class="list-group" id="codelist">
+</div>
+<script src="js/jsOTP.min.js"></script>
+<script>
+    setnavbar("otp", "", "home");
+
+    var totp = new jsOTP.totp();
+
+    var ls_text = localStorage.getItem("otp");
+    var keys = [];
+    if (ls_text !== null && ls_text != "") {
+	var keys = JSON.parse(ls_text || "[]");
+	if (keys.length > 0) {
+	    $("#nokeys").css("display", "none");
+	}
+	for (var i = 0; i < keys.length; i++) {
+	    var code = totp.getOtp(keys[i]["secret"]);
+	    // Escape HTML characters
+	    var label = $('<div/>').html(keys[i]["label"]).html();
+	    var issuer = $('<div/>').text(keys[i]["issuer"]).html();
+	    $("#codelist").append("<div class=\"list-group-item\" id=\"codeitem_" + i + "\">"
+		    + "<span class=\"pull-right\" style=\"color: red;\" onclick=\"deleteCode(" + i + ")\"><i class=\"fa fa-trash-o\"></i></span>"
+		    + "<p class=\"h6\">" + label + "</p>"
+		    + "<div class=\"h3 code\" style=\"font-weight: bold;\">" + code + "</div>"
+		    + "<p class=\"small\">" + issuer + "</p>"
+		    + "</div>");
+	}
+    }
+
+    function refreshCountdown() {
+	var percent = ((30 - ((new Date).getSeconds() % 30)) / 30) * 100;
+	$("#countdown").css("width", percent + "%");
+    }
+
+    function refreshCodes() {
+	for (var i = 0; i < keys.length; i++) {
+	    var code = totp.getOtp(keys[i]["secret"]);
+	    $("#codelist #codeitem_" + i + " .code").text(code);
+	}
+    }
+
+    function deleteCode(index) {
+        navigator.notification.confirm("Delete auth key?  This cannot be undone, so make sure you don't need this key to login anymore!", function (result) {
+            if (result != 1) {
+                return;
+            }
+            keys.splice(index, 1);
+            localStorage.setItem("otp", JSON.stringify(keys));
+            openscreen("otp");
+        }, "Delete " + keys[index]["label"] + "?");
+    }
+
+    setInterval(function () {
+	refreshCountdown();
+	refreshCodes();
+    }, 1000);
+
+    refreshCountdown();
+</script>

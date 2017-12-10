@@ -1,0 +1,132 @@
+<br />
+<div class="panel panel-blue">
+    <div class="panel-body">
+        <p></p>
+        <span class="btn btn-primary btn-lg" onclick="scanCode()" id="scancodebtn">
+            <i class="fa fa-qrcode"></i> Scan QR Code
+        </span>
+        <span class="btn btn-link" onclick="manualshow()" id="manualaddbtn">
+            Manual Entry
+        </span>
+        <div id="manual_add" class="well" style="display: none;">
+            <input type="text" id="key" class="form-control" placeholder="Secret key" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" /> <br />
+            <input type="text" id="label" class="form-control" placeholder="Label" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" /> <br />
+            <input type="text" id="issuer" class="form-control" placeholder="Issuer" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <br />
+            <div class="btn btn-primary" onclick="manualadd()">
+                Continue
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#key").on("keyup", function () {
+	if (window.getSelection().toString() !== '') {
+	    return;
+	}
+	var text = $('#key').val().replace(/\s+/g, '');
+	var formatted = "";
+	for (var i = 1; i <= text.length; i++) {
+	    formatted = formatted + text[i - 1];
+	    if (i % 4 == 0 && i > 1 && i < text.length) {
+		// add a space every 5 characters,
+		// unless it's the first character
+		// or the last character
+		formatted = formatted + " ";
+	    }
+	}
+	$('#key').val(formatted.toUpperCase());
+    });
+
+    function manualadd() {
+	var key = $('#key').val().replace(/\s+/g, '');
+	var label = $('#label').val();
+	var issuer = $('#issuer').val();
+	addOTP(key, label, issuer);
+    }
+
+    function manualshow() {
+	$('#manual_add').css('display', 'block');
+    }
+
+    function addOTP(key, label, issuer) {
+	if (key == "") {
+	    navigator.notification.alert("Missing secret key.", null, "Error", 'Dismiss');
+	    return;
+	}
+	if (label == "") {
+	    navigator.notification.alert("Missing label.", null, "Error", 'Dismiss');
+	    return;
+	}
+	var ls_text = localStorage.getItem("otp");
+	var keys = [];
+	if (ls_text != null && ls_text != "") {
+	    keys = JSON.parse(ls_text || "[]");
+	}
+
+	keys.push({"secret": key, "label": label, "issuer": issuer});
+	localStorage.setItem("otp", JSON.stringify(keys));
+	navigator.notification.alert("2-factor key saved.", null, "Key added", 'Dismiss');
+	openscreen("otp");
+    }
+
+    function scanCode() {
+	try {
+	    cordova.plugins.barcodeScanner.scan(
+		    function (result) {
+			if (!result.cancelled) {
+			    try {
+				var url = decodeURI(result.text);
+			    } catch (e) {
+				navigator.notification.alert("Could not decode OTP URI.", null, "Error", 'Dismiss');
+				return;
+			    }
+			    if (!url.startsWith("otpauth://")) {
+				navigator.notification.alert("Invalid OTP code.  Try again.", null, "Error", 'Dismiss');
+				return;
+			    }
+			    if (!url.startsWith("otpauth://totp/")) {
+				navigator.notification.alert("Unsupported key type.", null, "Error", 'Dismiss');
+				return;
+			    }
+			    var stripped = url.replace("otpauth://totp/", "");
+			    var params = stripped.split("?")[1].split("&");
+			    var label = stripped.split("?")[0];
+			    var secret = "";
+			    var issuer = "";
+			    for (var i = 0; i < params.length; i++) {
+				var param = params[i].split("=");
+				if (param[0] == "secret") {
+				    secret = param[1].toUpperCase();
+				} else if (param[0] == "issuer") {
+				    issuer = param[1];
+				} else if (param[0] == "algorithm" && param[1].toLowerCase() != "sha1") {
+				    navigator.notification.alert("Unsupported hash algorithm.", null, "Error", 'Dismiss');
+				    return;
+				} else if (param[0] == "digits" && param[1] != "6") {
+				    navigator.notification.alert("Unsupported digit count.", null, "Error", 'Dismiss');
+				    return;
+				} else if (param[0] == "period" && param[1] != "30") {
+				    navigator.notification.alert("Unsupported period.", null, "Error", 'Dismiss');
+				    return;
+				}
+			    }
+			    addOTP(secret, label, issuer);
+			}
+		    },
+		    function (error) {
+			navigator.notification.alert("Scanning failed: " + error, null, "Error", 'Dismiss');
+		    },
+		    {
+			"showFlipCameraButton": false,
+			"prompt": "Scan OTP QR code."
+		    }
+	    );
+	} catch (ex) {
+	    navigator.notification.alert(ex.message, null, "Error", 'Dismiss');
+	}
+    }
+
+    setnavbar("app", "Add Auth Key", "otp");
+</script>

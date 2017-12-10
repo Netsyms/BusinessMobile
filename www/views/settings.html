@@ -47,16 +47,16 @@
     setnavbar("settings");
 
     function deleteall() {
-        navigator.notification.confirm("Really wipe user data?  You will need to resync the app with AccountHub to use it again.", function (result) {
+        navigator.notification.confirm("Really wipe user data?  You will need to resync the app with AccountHub to use it again.  This will not delete 2-factor auth keys.", function (result) {
             if (result != 1) {
                 return;
             }
             // Wipe localStorage
             localStorage.removeItem("setupcomplete");
             localStorage.removeItem("username");
+            localStorage.removeItem("password");
             localStorage.removeItem("syncurl");
             localStorage.removeItem("key");
-            localStorage.clear();
             // force-reload app
             navigator.notification.alert("Connection data and credentials erased.", function () {
                 restartApplication();
