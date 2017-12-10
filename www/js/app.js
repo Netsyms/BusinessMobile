@@ -30,6 +30,7 @@ document.addEventListener("deviceready", function () {
  * succeeds.
  */
 function getuserinfo(callback) {
+    $(".loading-text").text("Loading account...");
     $.post(localStorage.getItem("syncurl"), {
         username: localStorage.getItem("username"),
         key: localStorage.getItem("key"),
@@ -37,6 +38,7 @@ function getuserinfo(callback) {
         action: "user_info"
     }, function (data) {
         if (data.status === 'OK') {
+	    $(".loading-text").text("Loading...");
             userinfo = data.info;
             if (typeof callback == 'function') {
                 callback();
@@ -196,7 +198,12 @@ function restartApplication() {
 // Handle back button to close things
 document.addEventListener("backbutton", function (event) {
     if (localStorage.getItem("setupcomplete")) {
-        if (_returnscreen != null) {
+	if ($("#appframe").length && historyctr > 0) {
+	    console.log("going back");
+	    var iframe = document.getElementById("appframe");
+	    iframe.contentWindow.postMessage("goback", "*");
+	    historyctr--;
+	} else if (_returnscreen != null) {
             openscreen(_returnscreen, "FADE");
             _returnscreen = null;
         } else {

@@ -1,7 +1,9 @@
-<iframe id="appframe" src="views/appspinner.html" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0px;"></iframe>
+<iframe id="appframe" src="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0px;"></iframe>
+<iframe id="loadframe" src="views/appspinner.html" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0px; z-index: 999999;"></iframe>
 
 <script src="js/material-palette.js"></script>
 <script>
+    var historyctr = -1;
     /**
      * Open an app with native Android UI elements
      * @param String id Application ID
@@ -14,102 +16,121 @@
      * @returns {undefined}
      */
     function launchapp(id, api, url, icon, title, injectcode, shownavbar) {
-        if (typeof shownavbar === 'undefined' || shownavbar === false) {
-            setnavbar(false);
-        } else {
-            setnavbar("app", title);
-            $('#appframe').css('top', '75px');
-        }
-        $.post(url + api, {
-            username: localStorage.getItem("username"),
-            key: localStorage.getItem("key"),
-            password: localStorage.getItem("password"),
-            action: "start_session"
-        }, function (data) {
-            if (data.status === 'OK') {
-                if (typeof injectcode === 'undefined' || injectcode === true) {
-                    $('#appframe').on("load", function () {
-                        $.get("css/sidemenu.css", function (style) {
-                            $('#appframe').contents().find('head').append("<style>" + style + "</style>");
-                            $.get("js/sidemenu.js", function (script) {
-                                script = script.replace("%%JQUERYFXOFF%%", !(localStorage.getItem("animations") === null || localStorage.getItem("animations") === "true"));
-                                script = script.replace("%%USERNAME%%", userinfo.realname);
-                                script = script.replace("%%LOGO%%", icon);
-                                $('#appframe').contents().find('body').append("<script>" + script + "<\/script>");
-                            });
-                        });
-                    });
-                } else {
-                    // Only inject minimal CSS
-                    $('#appframe').on("load", function () {
-                        $.get("css/inject_mini.css", function (style) {
-                            $('#appframe').contents().find('head').append("<style>" + style + "</style>");
-                        });
-                    });
-                }
-                $('#appframe').attr('src', url);
-            } else {
-                navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
-                openscreen("home");
-            }
-        }, "json").fail(function () {
-            navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
-            openscreen("home");
-        });
+	if (typeof shownavbar === 'undefined' || shownavbar === false) {
+	    setnavbar(false);
+	} else {
+	    setnavbar("app", title);
+	    $('#appframe').css('top', '75px');
+	}
+	$.post(url + api, {
+	    username: localStorage.getItem("username"),
+	    key: localStorage.getItem("key"),
+	    password: localStorage.getItem("password"),
+	    action: "start_session"
+	}, function (data) {
+	    if (data.status === 'OK') {
+                document.getElementById("loadframe").contentWindow.postMessage("loginok", "*");
+		if (typeof injectcode === 'undefined' || injectcode === true) {
+		    $('#appframe').on("load", function () {
+                        $("#loadframe").fadeOut(300);
+			historyctr++;
+			$.get("css/sidemenu.css", function (style) {
+			    $('#appframe').contents().find('head').append("<style>" + style + "</style>");
+			    $.get("js/jquery-ui.min.js", function (script) {
+				$('#appframe').contents().find('body').append("<script>" + script + "<\/script>");
+				$.get("js/hammer.min.js", function (script) {
+				    $('#appframe').contents().find('body').append("<script>" + script + "<\/script>");
+				    $.get("js/sidemenu.js", function (script) {
+					script = script.replace("%%JQUERYFXOFF%%", !(localStorage.getItem("animations") === null || localStorage.getItem("animations") === "true"));
+					script = script.replace("%%USERNAME%%", userinfo.realname);
+					script = script.replace("%%LOGO%%", icon);
+					$('#appframe').contents().find('body').append("<script>" + script + "<\/script>");
+				    });
+				});
+			    });
+			});
+		    });
+		} else {
+		    // Only inject minimal CSS
+		    $('#appframe').on("load", function () {
+			$.get("css/inject_mini.css", function (style) {
+			    $('#appframe').contents().find('head').append("<style>" + style + "</style>");
+			});
+		    });
+		}
+		$('#appframe').attr('src', url);
+	    } else {
+		navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
+		openscreen("home");
+	    }
+	}, "json").fail(function () {
+	    navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
+	    openscreen("home");
+	});
     }
-    
+
     var scanningactive = false;
+    var dedup = false;
     window.addEventListener('message', function (event) {
-        console.log("app event: " + event.data);
-        if (event.data == "quit") {
-            openscreen("home");
-        } else if (event.data.startsWith("setcolor ")) {
-            var color = event.data.split(" ", 2)[1];
-            if (cordova.platformId == 'android') {
-                window.plugins.headerColor.tint(color);
-                for (var swatch in _PALETTE) {
-                    if (color == _PALETTE[swatch]["shade_500"]) {
-                        StatusBar.backgroundColorByHexString(_PALETTE[swatch]["shade_700"]);
-                        return;
-                    }
-                }
-            } else {
-                StatusBar.backgroundColorByHexString(color);
-            }
-        } else if (event.data.startsWith("scancode ")) {
-            var callbackcode = event.data.split(" ").slice(1).join(" ");
-            console.log("got scancode " + callbackcode);
-            try {
-                if (scanningactive) {
-                    console.log("Scanner already active, ignoring request.");
-                    return;
-                }
-                scanningactive = true;
-                cordova.plugins.barcodeScanner.scan(
-                        function (result) {
-                            scanningactive = false;
-                            if (!result.cancelled) {
-                                var iframe = document.getElementById("appframe");
-                                iframe.contentWindow.postMessage("coderesult~|~" + callbackcode + "~|~" + result.text, "*");
-                            }
-                        },
-                        function (error) {
-                            scanningactive = false;
-                            navigator.notification.alert("Scanning failed: " + error, null, "Error", 'Dismiss');
-                        },
-                        {
-                            "showFlipCameraButton": true,
-                            "prompt": "Scan Code"
-                        }
-                );
-            } catch (ex) {
-                scanningactive = false;
-                navigator.notification.alert(ex.message, null, "Error", 'Dismiss');
-            }
+	console.log("app event: " + event.data);
+        setTimeout(function () {
+            dedup = false;
+        }, 500);
+        if (dedup) {
+            return;
         }
+        dedup = true;
+	if (event.data == "quit") {
+	    openscreen("home");
+	} else if (event.data == "goneback") {
+	    historyctr -= 1;
+	} else if (event.data.startsWith("setcolor ")) {
+	    var color = event.data.split(" ", 2)[1];
+	    if (cordova.platformId == 'android') {
+		window.plugins.headerColor.tint(color);
+		for (var swatch in _PALETTE) {
+		    if (color == _PALETTE[swatch]["shade_500"]) {
+			StatusBar.backgroundColorByHexString(_PALETTE[swatch]["shade_700"]);
+			return;
+		    }
+		}
+	    } else {
+		StatusBar.backgroundColorByHexString(color);
+	    }
+	} else if (event.data.startsWith("scancode ")) {
+	    var callbackcode = event.data.split(" ").slice(1).join(" ");
+	    console.log("got scancode " + callbackcode);
+	    try {
+		if (scanningactive) {
+		    console.log("Scanner already active, ignoring request.");
+		    return;
+		}
+		scanningactive = true;
+		cordova.plugins.barcodeScanner.scan(
+			function (result) {
+			    scanningactive = false;
+			    if (!result.cancelled) {
+				var iframe = document.getElementById("appframe");
+				iframe.contentWindow.postMessage("coderesult~|~" + callbackcode + "~|~" + result.text, "*");
+			    }
+			},
+			function (error) {
+			    scanningactive = false;
+			    navigator.notification.alert("Scanning failed: " + error, null, "Error", 'Dismiss');
+			},
+			{
+			    "showFlipCameraButton": true,
+			    "prompt": "Scan Code"
+			}
+		);
+	    } catch (ex) {
+		scanningactive = false;
+		navigator.notification.alert(ex.message, null, "Error", 'Dismiss');
+	    }
+	}
     }, false);
 
     if (userinfo == null) {
-        getuserinfo();
+	getuserinfo();
     }
 </script>

@@ -10,7 +10,7 @@ html, body {
 .app-dock {
     margin: 0 auto 10px auto;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
@@ -78,4 +78,8 @@ span.navbar-brand {
 
 #navbar {
     min-height: 56px;
+}
+
+.loading-text {
+    font-size: 18px;
 }

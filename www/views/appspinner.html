@@ -1,96 +1,141 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Loading</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            html, body {
-                height: 100%;
-            }
+<title>Loading</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    html, body {
+        height: 100%;
+        background-color: white;
+        font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
 
-            body {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-direction: column;
-            }
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
 
-            .spinner {
-                -webkit-animation: rotator 1.4s linear infinite;
-                animation: rotator 1.4s linear infinite;
-            }
+    .spinner {
+        -webkit-animation: rotator 1.4s linear infinite;
+        animation: rotator 1.4s linear infinite;
+    }
 
-            @-webkit-keyframes rotator {
-                0% {
-                    -webkit-transform: rotate(0deg);
-                    transform: rotate(0deg);
-                }
-                100% {
-                    -webkit-transform: rotate(270deg);
-                    transform: rotate(270deg);
-                }
-            }
+    @-webkit-keyframes rotator {
+        0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(270deg);
+            transform: rotate(270deg);
+        }
+    }
 
-            @keyframes rotator {
-                0% {
-                    -webkit-transform: rotate(0deg);
-                    transform: rotate(0deg);
-                }
-                100% {
-                    -webkit-transform: rotate(270deg);
-                    transform: rotate(270deg);
-                }
-            }
-            .spinner .path {
-                stroke-dasharray: 187;
-                stroke-dashoffset: 0;
-                -webkit-transform-origin: center;
-                transform-origin: center;
-                -webkit-animation: dash 1.4s ease-in-out infinite, 5.6s ease-in-out infinite;
-                animation: dash 1.4s ease-in-out infinite, 5.6s ease-in-out infinite;
-                stroke: #448aff;    
-            }
+    @keyframes rotator {
+        0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(270deg);
+            transform: rotate(270deg);
+        }
+    }
+    .spinner .path {
+        stroke-dasharray: 187;
+        stroke-dashoffset: 0;
+        -webkit-transform-origin: center;
+        transform-origin: center;
+        -webkit-animation: dash 1.4s ease-in-out infinite, 5.6s ease-in-out infinite;
+        animation: dash 1.4s ease-in-out infinite, 5.6s ease-in-out infinite;
+        stroke: #448aff;    
+    }
 
-            @-webkit-keyframes dash {
-                0% {
-                    stroke-dashoffset: 187;
-                }
-                50% {
-                    stroke-dashoffset: 46.75;
-                    -webkit-transform: rotate(135deg);
-                    transform: rotate(135deg);
-                }
-                100% {
-                    stroke-dashoffset: 187;
-                    -webkit-transform: rotate(450deg);
-                    transform: rotate(450deg);
-                }
-            }
+    @-webkit-keyframes dash {
+        0% {
+            stroke-dashoffset: 187;
+        }
+        50% {
+            stroke-dashoffset: 46.75;
+            -webkit-transform: rotate(135deg);
+            transform: rotate(135deg);
+        }
+        100% {
+            stroke-dashoffset: 187;
+            -webkit-transform: rotate(450deg);
+            transform: rotate(450deg);
+        }
+    }
 
-            @keyframes dash {
-                0% {
-                    stroke-dashoffset: 187;
-                }
-                50% {
-                    stroke-dashoffset: 46.75;
-                    -webkit-transform: rotate(135deg);
-                    transform: rotate(135deg);
-                }
-                100% {
-                    stroke-dashoffset: 187;
-                    -webkit-transform: rotate(450deg);
-                    transform: rotate(450deg);
-                }
-            }
+    @keyframes dash {
+        0% {
+            stroke-dashoffset: 187;
+        }
+        50% {
+            stroke-dashoffset: 46.75;
+            -webkit-transform: rotate(135deg);
+            transform: rotate(135deg);
+        }
+        100% {
+            stroke-dashoffset: 187;
+            -webkit-transform: rotate(450deg);
+            transform: rotate(450deg);
+        }
+    }
 
-        </style>
-    </head>
-    <body>
-        <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-        </svg>
-        
-        <p>Logging in...</p>
-    </body>
-</html>
+    #statustext {
+        text-align: center;
+    }
+
+    #giveup {
+        display: none;
+        margin-top: 5px;
+        border: none;
+        border-radius: 3px;
+        box-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+        padding: 6px 16px;
+        font-size: 13px;
+        line-height: 1.846;
+        color: #fff;
+        background-color: #2196f3;
+        text-align: center;
+        vertical-align: middle;
+        touch-action: manipulation;
+        white-space: nowrap;
+        text-decoration: none;
+        box-sizing: border-box;
+        text-transform: uppercase;
+        position: relative;
+    }
+</style>
+<svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+<circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+</svg>
+
+<p id="statustext">Logging in...</p>
+<br />
+<div id="giveup" onclick="parent.postMessage('quit', '*');">Give up</div>
+<script>
+    window.addEventListener('message', function (event) {
+	if (event.data == "loginok") {
+	    document.getElementById("statustext").innerHTML = "Loading...";
+	    setTimeout(function () {
+		document.getElementById("statustext").innerHTML = "Still loading...";
+	    }, 5000);
+	    setTimeout(function () {
+		document.getElementById("statustext").innerHTML = "Just a moment...";
+		document.getElementById("giveup").style.display = "inline-block";
+	    }, 10000);
+	    setTimeout(function () {
+		document.getElementById("statustext").innerHTML = "Well this is awkward.";
+	    }, 20000);
+	    setTimeout(function () {
+		document.getElementById("statustext").innerHTML = "[fidgets nervously]";
+	    }, 25000);
+	    setTimeout(function () {
+		document.getElementById("statustext").innerHTML = "Either something is broken or your connection is too slow.";
+	    }, 30000);
+	}
+    });
+</script>
