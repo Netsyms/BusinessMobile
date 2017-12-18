@@ -28,8 +28,7 @@
                 navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
             }
         }, "json").fail(function () {
-            navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
-            openscreen("homeloaderror");
+            navigator.notification.alert("Unable to request code.  Try again in a few seconds.", null, "Error", 'Dismiss');
         });
     }
 
