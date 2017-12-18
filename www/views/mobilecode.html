@@ -1,0 +1,37 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h3 id="code" style="text-align: center;"></h3>
+            <div class="pull-right">
+                <button class="btn btn-primary" onclick="gencode()"><i class="fa fa-refresh"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    setnavbar("app", "Login Code", "home");
+
+    function gencode() {
+        $.post(localStorage.getItem("syncurl"), {
+            username: localStorage.getItem("username"),
+            key: localStorage.getItem("key"),
+            action: "gencode"
+        }, function (data) {
+            if (data.status === 'OK') {
+                $("#code").text("B-" + data.code);
+            } else {
+                navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
+            }
+        }, "json").fail(function () {
+            navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
+            openscreen("homeloaderror");
+        });
+    }
+
+    gencode();
+</script>

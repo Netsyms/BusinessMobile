@@ -132,6 +132,9 @@ function setnavbar(type, title, returnscreen) {
 	navbar.fadeOut(150, function () {
 	    switch (type) {
 		case "home":
+		    navbar.html('<span class="navbar-brand" style="color: white;">Business</span><span class="navbar-brand pull-right"><span onclick="openscreen(\'mobilecode\', \'FADE\')"><img src="icons/ic_lock.svg" alt="" /></span> &nbsp; <span onclick="openscreen(\'otp\', \'FADE\')"><img src="icons/ic_vpn_key.svg" alt="" /></span> &nbsp; <span onclick="openscreen(\'settings\', \'FADE\')"><img src="icons/ic_settings.svg" alt="" /></span></span>');
+		    break;
+		case "setup":
 		    navbar.html('<span class="navbar-brand" style="color: white;">Business</span><span class="navbar-brand pull-right"><span onclick="openscreen(\'otp\', \'FADE\')"><img src="icons/ic_vpn_key.svg" alt="" /></span> &nbsp; <span onclick="openscreen(\'settings\', \'FADE\')"><img src="icons/ic_settings.svg" alt="" /></span></span>');
 		    break;
 		case "settings":
