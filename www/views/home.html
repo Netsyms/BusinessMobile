@@ -15,37 +15,37 @@
 
 <script>
     function loadapps() {
-	$(".loading-text").html("Loading Apps...");
-	$.post(localStorage.getItem("syncurl"), {
-	    username: localStorage.getItem("username"),
-	    key: localStorage.getItem("key"),
-	    action: "listapps"
-	}, function (data) {
-	    if (data.status === 'OK') {
-		$("#loading-text").text("One moment...");
-		$('#app-dock').html("");
-		Object.keys(data.apps).forEach(function (k) {
-		    var app = data.apps[k];
-		    var iconurl = app.icon;
-		    if (!app.icon.startsWith("http")) {
-			iconurl = app.url + app.icon;
-		    }
-		    $("<div class=\"app-dock-item\" onclick=\"openapp('" + k + "', '" + app.mobileapi + "', '" + app.url + "', '" + iconurl + "', '" + app.title + "')\"><p><img src=\"" + iconurl + "\" class=\"img-responsive app-icon\" /><span>" + app.title + "</span></p></div>").hide().appendTo("#app-dock").fadeIn(200);
-		});
-	    } else {
-		navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
-		openscreen("homeloaderror");
-	    }
-	}, "json").fail(function () {
-	    navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
-	    openscreen("homeloaderror");
-	});
+        $(".loading-text").html("Loading Apps...");
+        $.post(localStorage.getItem("syncurl"), {
+            username: localStorage.getItem("username"),
+            key: localStorage.getItem("key"),
+            action: "listapps"
+        }, function (data) {
+            if (data.status === 'OK') {
+                $("#loading-text").text("One moment...");
+                $('#app-dock').html("");
+                Object.keys(data.apps).forEach(function (k) {
+                    var app = data.apps[k];
+                    var iconurl = app.icon;
+                    if (!app.icon.startsWith("http")) {
+                        iconurl = app.url + app.icon;
+                    }
+                    $("<div class=\"app-dock-item\" onclick=\"openapp('" + k + "', '" + app.mobileapi + "', '" + app.url + "', '" + iconurl + "', '" + app.title + "')\"><p><img src=\"" + iconurl + "\" class=\"img-responsive app-icon\" /><span>" + app.title + "</span></p></div>").hide().appendTo("#app-dock").fadeIn(200);
+                });
+            } else {
+                navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
+                openscreen("homeloaderror");
+            }
+        }, "json").fail(function () {
+            navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
+            openscreen("homeloaderror");
+        });
     }
 
     if (localStorage.getItem('setupcomplete')) {
-	setnavbar("home");
-	loadapps();
+        setnavbar("home");
+        loadapps();
     } else {
-	openscreen("setup1");
+        openscreen("setup1");
     }
 </script>

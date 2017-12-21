@@ -122,24 +122,24 @@
 <div id="giveup" onclick="parent.postMessage('quit', '*');">Give up</div>
 <script>
     window.addEventListener('message', function (event) {
-	if (event.data == "loginok") {
-	    document.getElementById("statustext").innerHTML = "Loading...";
-	    setTimeout(function () {
-		document.getElementById("statustext").innerHTML = "Still loading...";
-	    }, 5000);
-	    setTimeout(function () {
-		document.getElementById("statustext").innerHTML = "Just a moment...";
-		document.getElementById("giveup").style.display = "inline-block";
-	    }, 10000);
-	    setTimeout(function () {
-		document.getElementById("statustext").innerHTML = "Well this is awkward.";
-	    }, 20000);
-	    setTimeout(function () {
-		document.getElementById("statustext").innerHTML = "[fidgets nervously]";
-	    }, 25000);
-	    setTimeout(function () {
-		document.getElementById("statustext").innerHTML = "Either something is broken or your connection is too slow.";
-	    }, 30000);
-	}
+        if (event.data == "loginok") {
+            document.getElementById("statustext").innerHTML = "Loading...";
+            setTimeout(function () {
+                document.getElementById("statustext").innerHTML = "Still loading...";
+            }, 5000);
+            setTimeout(function () {
+                document.getElementById("statustext").innerHTML = "Just a moment...";
+                document.getElementById("giveup").style.display = "inline-block";
+            }, 10000);
+            setTimeout(function () {
+                document.getElementById("statustext").innerHTML = "Well this is awkward.";
+            }, 20000);
+            setTimeout(function () {
+                document.getElementById("statustext").innerHTML = "[fidgets nervously]";
+            }, 25000);
+            setTimeout(function () {
+                document.getElementById("statustext").innerHTML = "Either something is broken or your connection is too slow.";
+            }, 30000);
+        }
     });
 </script>

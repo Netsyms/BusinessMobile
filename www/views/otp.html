@@ -26,34 +26,34 @@
     var ls_text = localStorage.getItem("otp");
     var keys = [];
     if (ls_text !== null && ls_text != "") {
-	var keys = JSON.parse(ls_text || "[]");
-	if (keys.length > 0) {
-	    $("#nokeys").css("display", "none");
-	}
-	for (var i = 0; i < keys.length; i++) {
-	    var code = totp.getOtp(keys[i]["secret"]);
-	    // Escape HTML characters
-	    var label = $('<div/>').html(keys[i]["label"]).html();
-	    var issuer = $('<div/>').text(keys[i]["issuer"]).html();
-	    $("#codelist").append("<div class=\"list-group-item\" id=\"codeitem_" + i + "\">"
-		    + "<span class=\"pull-right\" style=\"color: red;\" onclick=\"deleteCode(" + i + ")\"><i class=\"fa fa-trash-o\"></i></span>"
-		    + "<p class=\"h6\">" + label + "</p>"
-		    + "<div class=\"h3 code\" style=\"font-weight: bold;\">" + code + "</div>"
-		    + "<p class=\"small\">" + issuer + "</p>"
-		    + "</div>");
-	}
+        var keys = JSON.parse(ls_text || "[]");
+        if (keys.length > 0) {
+            $("#nokeys").css("display", "none");
+        }
+        for (var i = 0; i < keys.length; i++) {
+            var code = totp.getOtp(keys[i]["secret"]);
+            // Escape HTML characters
+            var label = $('<div/>').html(keys[i]["label"]).html();
+            var issuer = $('<div/>').text(keys[i]["issuer"]).html();
+            $("#codelist").append("<div class=\"list-group-item\" id=\"codeitem_" + i + "\">"
+                    + "<span class=\"pull-right\" style=\"color: red;\" onclick=\"deleteCode(" + i + ")\"><i class=\"fa fa-trash-o\"></i></span>"
+                    + "<p class=\"h6\">" + label + "</p>"
+                    + "<div class=\"h3 code\" style=\"font-weight: bold;\">" + code + "</div>"
+                    + "<p class=\"small\">" + issuer + "</p>"
+                    + "</div>");
+        }
     }
 
     function refreshCountdown() {
-	var percent = ((30 - ((new Date).getSeconds() % 30)) / 30) * 100;
-	$("#countdown").css("width", percent + "%");
+        var percent = ((30 - ((new Date).getSeconds() % 30)) / 30) * 100;
+        $("#countdown").css("width", percent + "%");
     }
 
     function refreshCodes() {
-	for (var i = 0; i < keys.length; i++) {
-	    var code = totp.getOtp(keys[i]["secret"]);
-	    $("#codelist #codeitem_" + i + " .code").text(code);
-	}
+        for (var i = 0; i < keys.length; i++) {
+            var code = totp.getOtp(keys[i]["secret"]);
+            $("#codelist #codeitem_" + i + " .code").text(code);
+        }
     }
 
     function deleteCode(index) {
@@ -68,8 +68,8 @@
     }
 
     setInterval(function () {
-	refreshCountdown();
-	refreshCodes();
+        refreshCountdown();
+        refreshCodes();
     }, 1000);
 
     refreshCountdown();
