@@ -154,7 +154,7 @@ function openapp(id, api, url, icon, title, injectcode, shownavbar) {
 
 /**
  * Opens a modal dialog over the top of everything else.
- * @param {String} filename screens/[filename].html
+ * @param {String} filename views/[filename].html
  * @param {String} modalselector [#id-of-the-modal]
  * @returns {undefined}
  */
@@ -171,7 +171,7 @@ function openmodal(filename, modalselector) {
  * @returns {undefined}
  */
 function closemodal(modalselector) {
-    $(modalselector).modal(hide);
+    $(modalselector).modal('hide');
 }
 
 function restartApplication() {
