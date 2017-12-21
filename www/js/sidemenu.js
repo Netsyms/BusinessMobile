@@ -51,13 +51,13 @@ function togglemenu() {
 }
 
 $(document).ready(function () {
-    $.fx.off = %%JQUERYFXOFF%%;
+    $.fx.off = __JQUERYFXOFF__;
     var pages = $('#navbar-collapse .navbar-nav').html();
     var user = $('#navbar-collapse .navbar-right').html();
-    var username = "%%USERNAME%%";
+    var username = "__USERNAME__";
     var menucolor = $('.navbar').css('backgroundColor');
     var textcolor = $('.navbar .navbar-nav > li > a').css('color');
-    var logo = "%%LOGO%%";
+    var logo = "__LOGO__";
     $('body').append("<div id='swipe-nav'><div id='swipe-header' style='background-color: " + menucolor + "; color: " + textcolor + "'><a href='./app.php'><img id='swipe-appicon' src='" + logo + "' /></a> <div id='swipe-username'><i class='fa fa-user fa-fw'></i> " + username + "</div></div>\n<ul id='swipe-pages'>" + pages + "</ul><ul><li><a onclick='quitapp()'><i class='fa fa-sign-out fa-fw'></i> Back to Menu</a></li></ul></div>");
     $('body').append("<div id='swipe-shader'></div>");
     

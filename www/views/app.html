@@ -44,9 +44,9 @@
 				$.get("js/hammer.min.js", function (script) {
 				    $('#appframe').contents().find('body').append("<script>" + script + "<\/script>");
 				    $.get("js/sidemenu.js", function (script) {
-					script = script.replace("%%JQUERYFXOFF%%", !(localStorage.getItem("animations") === null || localStorage.getItem("animations") === "true"));
-					script = script.replace("%%USERNAME%%", userinfo.realname);
-					script = script.replace("%%LOGO%%", icon);
+					script = script.replace("__JQUERYFXOFF__", !(localStorage.getItem("animations") === null || localStorage.getItem("animations") === "true"));
+					script = script.replace("__USERNAME__", userinfo.realname);
+					script = script.replace("__LOGO__", icon);
 					$('#appframe').contents().find('body').append("<script>" + script + "<\/script>");
 				    });
 				});
