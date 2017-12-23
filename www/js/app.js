@@ -78,16 +78,45 @@ function openfragment(fragment, target, effect) {
 }
 
 /**
+ * Add button to the top navbar.
+ * @param String screenid openscreen(screenid)
+ * @param String icon The filename of the icon to show: <img src="icons/icon"...
+ * @param String title Text to show next to the icon on large screens.
+ * @returns {undefined}
+ */
+function addnavbarbtn(screenid, icon, title) {
+    $('#navbar-buttons').append('<li><a onclick="openscreen(\'' + screenid + '\', \'FADE\')"><img src="icons/' + icon + '" alt="" /> <span class="hidden-xs">' + title + '</span></a></li>');
+}
+
+/**
+ * Hide the back arrow if screenid === false, otherwise show it and have it open screenid
+ * @param String screenid The ID of the screen to open when pressed.
+ * @returns {undefined}
+ */
+function setnavbartitle(title, showarrow, backscreen) {
+    var arrow = "";
+    if (showarrow === true) {
+        arrow = '<img src="icons/ic_arrow-back.svg" />';
+    }
+    var onclick = "";
+    if (backscreen !== null && backscreen !== false) {
+        onclick = ' onclick=\'openscreen("' + backscreen + '", "FADE");\'';
+    }
+    $("#navbar-header").html('<span class="navbar-brand" id="navbar-title" style="color: white;"' + onclick + '>' + arrow + title + '</span>');
+}
+
+/**
  * Set the navbar.
  * @param String,boolean type false if no navbar, "home" for the home screen, 
  * "settings" for settings, "app" for a custom title, or anything else for 
  * a simple one.
- * @param String title The title to show if type == "app"
+ * @param String screentitle The title to show if type == "app"
  * @param String returnscreen Where to go back to.  Defaults to "home".
  * @returns {undefined}
  */
-function setnavbar(type, title, returnscreen) {
+function setnavbar(type, screentitle, returnscreen) {
     var navbar = $('#navbar-header');
+    var btns = $('#navbar-buttons');
     if (type == false) {
         $('#navbar').css('display', 'none');
         $('#content-zone').css('margin-top', '0px');
@@ -106,28 +135,33 @@ function setnavbar(type, title, returnscreen) {
         } else {
             _returnscreen = returnscreen;
         }
-        navbar.fadeOut(150, function () {
-            switch (type) {
-                case "home":
-                    navbar.html('<span class="navbar-brand" style="color: white;">Business</span><span class="navbar-brand pull-right"><span onclick="openscreen(\'mobilecode\', \'FADE\')"><img src="icons/ic_lock.svg" alt="" /></span> &nbsp; <span onclick="openscreen(\'otp\', \'FADE\')"><img src="icons/ic_vpn_key.svg" alt="" /></span> &nbsp; <span onclick="openscreen(\'settings\', \'FADE\')"><img src="icons/ic_settings.svg" alt="" /></span></span>');
-                    break;
-                case "setup":
-                    navbar.html('<span class="navbar-brand" style="color: white;">Business</span><span class="navbar-brand pull-right"><span onclick="openscreen(\'otp\', \'FADE\')"><img src="icons/ic_vpn_key.svg" alt="" /></span> &nbsp; <span onclick="openscreen(\'settings\', \'FADE\')"><img src="icons/ic_settings.svg" alt="" /></span></span>');
-                    break;
-                case "settings":
-                    navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'home\', \'FADE\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand navbar-title" style="color: white;" onclick="openscreen(\'home\', \'FADE\')">Settings</span>');
-                    break;
-                case "otp":
-                    navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'home\', \'FADE\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand navbar-title" style="color: white;" onclick="openscreen(\'home\', \'FADE\')">Auth Keys</span><span class="navbar-brand pull-right" onclick="openscreen(\'addotp\', \'FADE\')"><img src="icons/ic_add.svg" alt="" /></span>');
-                    break;
-                case "app":
-                    navbar.html('<span class="navbar-brand pull-left" style="color: white;" onclick="openscreen(\'' + returnscreen + '\', \'FADE\')"><img src="icons/ic_arrow-back.svg" /></span><span class="navbar-brand navbar-title" style="color: white;" onclick="openscreen(\'' + returnscreen + '\', \'FADE\')">' + title + '</span>');
-                    break;
-                default:
-                    navbar.html('<span class="navbar-brand" style="color: white;">Business</span>');
-            }
-            navbar.fadeIn(150);
-        });
+        btns.html("");
+        switch (type) {
+            case "home":
+                setnavbartitle("Business", false, false);
+                addnavbarbtn("mobilecode", "ic_lock.svg", "Code Login");
+                addnavbarbtn("otp", "ic_vpn_key.svg", "2-factor Auth");
+                addnavbarbtn("settings", "ic_settings.svg", "Settings");
+                break;
+            case "setup":
+                setnavbartitle("Business", false, false);
+                addnavbarbtn("otp", "ic_vpn_key.svg", "2-factor Auth");
+                addnavbarbtn("settings", "ic_settings.svg", "Settings");
+                break;
+            case "settings":
+                setnavbartitle("Settings", true, "home");
+                break;
+            case "otp":
+                setnavbartitle("Auth Keys", true, "home");
+                addnavbarbtn("addotp", "ic_add.svg", "Add Code");
+                break;
+            case "app":
+                setnavbartitle(screentitle, true, returnscreen);
+                break;
+            default:
+                setnavbartitle("Business", false, false);
+                break;
+        }
     }
 }
 
