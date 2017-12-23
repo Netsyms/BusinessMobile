@@ -2,6 +2,14 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <div class="list-group">
+    <div class="list-group-item">
+        <h4><i class="fa fa-user"></i> <span id="username">Not logged in</span></h4>
+        <i class="fa fa-key"></i> Pairing Code: <span id="pairingkey">None</span><br />
+        <i class="fa fa-server"></i> Server: <span id="syncurl">None</span>
+    </div>
+</div>
+
+<div class="list-group">
     <div class="list-group-item" onclick="updatepassword()">
         <b>Update Password</b>
         <p>Enter your new password if you changed it from AccountHub.</p>
@@ -125,4 +133,19 @@
     cordova.getAppVersion.getVersionCode(function (version) {
         $('#app_version_code').text(version);
     });
+    
+    if (localStorage.getItem("username")) {
+        $("#username").text(localStorage.getItem("username"));
+    }
+    if (localStorage.getItem("key")) {
+        var key = localStorage.getItem("key");
+        var stars = "";
+        for (var i = 0; i < key.length - 6; i++) {
+            stars += "*";
+        }
+        $("#pairingkey").text(key.slice(0, 3) + stars + key.slice(-3));
+    }
+    if (localStorage.getItem("syncurl")) {
+        $("#syncurl").text(localStorage.getItem("syncurl").replace("/mobile/index.php", ""));
+    }
 </script>

@@ -89,8 +89,11 @@ function addnavbarbtn(screenid, icon, title) {
 }
 
 /**
- * Hide the back arrow if screenid === false, otherwise show it and have it open screenid
- * @param String screenid The ID of the screen to open when pressed.
+ * Set the navbar options.
+ * 
+ * @param String title Text to display
+ * @param boolean showarrow True if the back arrow should be visible
+ * @param Stringn backscreen The screen to open when the title is pressed, false or null for none
  * @returns {undefined}
  */
 function setnavbartitle(title, showarrow, backscreen) {
@@ -153,7 +156,7 @@ function setnavbar(type, screentitle, returnscreen) {
                 break;
             case "otp":
                 setnavbartitle("Auth Keys", true, "home");
-                addnavbarbtn("addotp", "ic_add.svg", "Add Code");
+                addnavbarbtn("addotp", "ic_add.svg", "Add Key");
                 break;
             case "app":
                 setnavbartitle(screentitle, true, returnscreen);
