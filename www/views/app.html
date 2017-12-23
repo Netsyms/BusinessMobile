@@ -37,6 +37,8 @@
                     $('#appframe').on("load", function () {
                         $("#loadframe").fadeOut(300);
                         historyctr++;
+                        // Do this right away so it's a bit harder to glitch
+                        $('#appframe').contents().find('.navbar-right').html("<li><a onclick='quitapp()'><i class='fa fa-sign-out fa-fw'></i> Back to Menu</a></li>");
                         $.get("css/sidemenu.css", function (style) {
                             $('#appframe').contents().find('head').append("<style>" + style + "</style>");
                             $.get("js/jquery-ui.min.js", function (script) {
