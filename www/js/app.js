@@ -142,7 +142,7 @@ function setnavbar(type, screentitle, returnscreen) {
         switch (type) {
             case "home":
                 setnavbartitle("Business", false, false);
-                addnavbarbtn("mobilecode", "ic_lock.svg", "Code Login");
+                addnavbarbtn("mobilecode", "ic_desktop-windows.svg", "Code Login");
                 addnavbarbtn("otp", "ic_vpn_key.svg", "2-factor Auth");
                 addnavbarbtn("settings", "ic_settings.svg", "Settings");
                 break;
