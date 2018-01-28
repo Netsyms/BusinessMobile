@@ -39,6 +39,7 @@
                         historyctr++;
                         // Do this right away so it's a bit harder to glitch
                         $('#appframe').contents().find('.navbar-right').html("<li><a onclick='quitapp()'><i class='fa fa-sign-out fa-fw'></i> Back to Menu</a></li>");
+                        // Moved BS4 code to sidemenu.js
                         $.get("css/sidemenu.css", function (style) {
                             $('#appframe').contents().find('head').append("<style>" + style + "</style>");
                             $.get("js/jquery-ui.min.js", function (script) {
@@ -75,20 +76,48 @@
     }
 
     var scanningactive = false;
-    var dedup = false;
+    var dedup = [];
     window.addEventListener('message', function (event) {
         console.log("app event: " + event.data);
         setTimeout(function () {
-            dedup = false;
+            dedup = [];
         }, 500);
-        if (dedup) {
+        if (dedup.includes(event.data)) {
             return;
         }
-        dedup = true;
+        dedup.push(event.data);
         if (event.data == "quit") {
             openscreen("home");
         } else if (event.data == "goneback") {
             historyctr -= 1;
+        } else if (event.data.startsWith("load_bs_version ")) {
+            var bootstrap_version = event.data.split(" ")[1];
+            var nav_breakpoint = event.data.split(" ")[2];
+            var bs_file = "bs3";
+            if (bootstrap_version.startsWith("4")) {
+                bs_file = "bs4";
+            }
+            $.get("css/sidemenu-" + bs_file + ".css", function (style) {
+                if (bs_file == "bs4") {
+                    var break_px = "767";
+                    switch (nav_breakpoint) {
+                        case "sm":
+                            break_px = "575";
+                            break;
+                        case "md":
+                            break_px = "767";
+                            break;
+                        case "lg":
+                            break_px = "991";
+                            break;
+                        case "xl":
+                            break_px = "1199";
+                            break;
+                    }
+                    style = style.replace("max-width: 767px", "max-width: " + break_px + "px");
+                }
+                $('#appframe').contents().find('head').append("<style>" + style + "</style>");
+            });
         } else if (event.data.startsWith("setcolor ")) {
             var color = event.data.split(" ", 2)[1];
             if (cordova.platformId == 'android') {
@@ -99,6 +128,7 @@
                         return;
                     }
                 }
+                StatusBar.backgroundColorByHexString(shadeColor2(color, -0.1));
             } else {
                 StatusBar.backgroundColorByHexString(color);
             }

@@ -52,20 +52,34 @@ function togglemenu() {
 
 $(document).ready(function () {
     $.fx.off = __JQUERYFXOFF__;
+    var bootstrap_version = $.fn.tooltip.Constructor.VERSION;
+    if (typeof navbar_breakpoint != "undefined") {
+        var nav_breakpoint = navbar_breakpoint;
+    } else {
+        var nav_breakpoint = "sm";
+    }
     var pages = $('#navbar-collapse .navbar-nav').html();
     var body = $('body');
     var username = "__USERNAME__";
     var menucolor = $('.navbar').css('backgroundColor');
-    var textcolor = $('.navbar .navbar-nav > li > a').css('color');
+    var textcolor = $('.navbar .navbar-brand').css('color');
     var logo = "__LOGO__";
-    body.append("<div id='swipe-nav'><div id='swipe-header' style='background-color: " + menucolor + "; color: " + textcolor + "'><a href='./app.php'><img id='swipe-appicon' src='" + logo + "' /></a> <div id='swipe-username'><i class='fa fa-user fa-fw'></i> " + username + "</div></div>\n<ul id='swipe-pages'>" + pages + "</ul><ul><li><a onclick='quitapp()'><i class='fa fa-sign-out fa-fw'></i> Back to Menu</a></li></ul></div>");
+
+    parent.postMessage("setcolor " + menucolor, "*");
+    parent.postMessage('load_bs_version ' + bootstrap_version + ' ' + nav_breakpoint, '*');
+
+    if (bootstrap_version.startsWith("4")) {
+        $('#navbar-right').html("<span class='nav-item py-" + nav_breakpoint + "-0'><a class='nav-link py-" + nav_breakpoint + "-0' onclick='quitapp()'><i class='fas fa-sign-out-alt fa-fw'></i> Back to Menu</a></span>");
+        body.append("<div id='swipe-nav'><div id='swipe-header' style='background-color: " + menucolor + "; color: " + textcolor + "'><a href='./app.php'><img id='swipe-appicon' src='" + logo + "' /></a> <div id='swipe-username'><i class='fa fa-user fa-fw'></i> " + username + "</div></div>\n<div id='swipe-pages' class='swipe-list'>" + pages + "</div><div class='swipe-list'><span class='nav-item'><a class='nav-link' onclick='quitapp()'><i class='fas fa-sign-out-alt fa-fw'></i> Back to Menu</a></span></div></div>");
+    } else {
+        body.append("<div id='swipe-nav'><div id='swipe-header' style='background-color: " + menucolor + "; color: " + textcolor + "'><a href='./app.php'><img id='swipe-appicon' src='" + logo + "' /></a> <div id='swipe-username'><i class='fa fa-user fa-fw'></i> " + username + "</div></div>\n<ul id='swipe-pages'>" + pages + "</ul><ul><li><a onclick='quitapp()'><i class='fa fa-sign-out fa-fw'></i> Back to Menu</a></li></ul></div>");
+    }
     body.append("<div id='swipe-shader'></div>");
 
     $(".navbar-brand").attr("href", "#");
 
-    parent.postMessage("setcolor " + menucolor, "*");
-
     $('button.navbar-toggle[data-toggle="collapse"]').click(togglemenu);
+    $('button.navbar-toggler[data-toggle="collapse"]').click(togglemenu);
 
     $('#swipe-shader').click(togglemenu);
 

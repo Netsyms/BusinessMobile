@@ -30,9 +30,9 @@ function openscreen(screenname, effect) {
 }
 
 /**
- * Fetch user info (name, email, etc) from the server and save to the global 
+ * Fetch user info (name, email, etc) from the server and save to the global
  * variable `userinfo`.
- * @param function callback An optional function to run if/when the request 
+ * @param function callback An optional function to run if/when the request
  * succeeds.
  */
 function getuserinfo(callback) {
@@ -90,7 +90,7 @@ function addnavbarbtn(screenid, icon, title) {
 
 /**
  * Set the navbar options.
- * 
+ *
  * @param String title Text to display
  * @param boolean showarrow True if the back arrow should be visible
  * @param Stringn backscreen The screen to open when the title is pressed, false or null for none
@@ -110,8 +110,8 @@ function setnavbartitle(title, showarrow, backscreen) {
 
 /**
  * Set the navbar.
- * @param String,boolean type false if no navbar, "home" for the home screen, 
- * "settings" for settings, "app" for a custom title, or anything else for 
+ * @param String,boolean type false if no navbar, "home" for the home screen,
+ * "settings" for settings, "app" for a custom title, or anything else for
  * a simple one.
  * @param String screentitle The title to show if type == "app"
  * @param String returnscreen Where to go back to.  Defaults to "home".
@@ -166,6 +166,17 @@ function setnavbar(type, screentitle, returnscreen) {
                 break;
         }
     }
+}
+
+/**
+ * Thanks to https://stackoverflow.com/a/13542669
+ * @param {type} color
+ * @param {type} percent
+ * @returns {String}
+ */
+function shadeColor2(color, percent) {
+    var f = parseInt(color.slice(1), 16), t = percent < 0 ? 0 : 255, p = percent < 0 ? percent * -1 : percent, R = f >> 16, G = f >> 8 & 0x00FF, B = f & 0x0000FF;
+    return "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
 }
 
 /**

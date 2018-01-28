@@ -1,0 +1,76 @@
+/*
+This Source Code Form is subject to the terms of the Mozilla Public
+License, v. 2.0. If a copy of the MPL was not distributed with this
+file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*/
+@media screen and (max-width: 767px) {
+    .navbar, .navbar-brand {
+        min-height: 56px;
+        height: 56px;
+    }
+
+    .navbar-brand {
+        font-size: 20px;
+        margin-top: -4px;
+    }
+
+    .navbar-toggle {
+        border: 0px solid white;
+        margin-top: 11px;
+        margin-bottom: 11px;
+    }
+
+    #navbar-collapse {
+        display: none;
+    }
+
+    button.navbar-toggle[data-toggle="collapse"] {
+        float: left;
+        margin-left: 15px;
+    }
+
+    .navbar-header .navbar-brand {
+        margin-left: -20px;
+    }
+
+    .navbar-header .navbar-brand img {
+        display: none;
+    }
+}
+
+#swipe-nav ul {
+    margin-bottom: 10px;
+    padding-left: 2px;
+    list-style-type: none;
+    padding: 3px;
+}
+
+#swipe-nav ul li {
+    color: #424242;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#swipe-nav ul li a:focus,a:active {
+    background-color: #e0e0e0;
+}
+
+#swipe-nav ul li i.fa {
+    font-size: 120%;
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+#swipe-nav ul li a {
+    display: inline-block;
+    color: #424242;
+    font-size: 110%;
+    text-decoration: none;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#swipe-nav ul li a:hover {
+    text-decoration: none;
+}
