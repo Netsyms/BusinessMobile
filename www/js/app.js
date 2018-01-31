@@ -272,5 +272,5 @@ document.addEventListener("deviceready", function () {
     } else {
         openscreen("setup1");
     }
-    setTimeout(navigator.splashscreen.hide, 1000);
+    setTimeout(navigator.splashscreen.hide, 500);
 }, false);

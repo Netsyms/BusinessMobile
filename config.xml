@@ -38,7 +38,6 @@
         <splash qualifier="land-xxhdpi" src="res/screens/android/screen-xxhdpi-landscape.png" />
         <splash qualifier="land-xxxhdpi" src="res/screens/android/screen-xxxhdpi-landscape.png" />
     </platform>
-    <preference name="SplashScreenDelay" value="3000" />
     <preference name="AutoHideSplashScreen" value="false" />
     <engine name="android" spec="^6.3.0" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
