@@ -69,6 +69,7 @@ $(document).ready(function () {
     parent.postMessage('load_bs_version ' + bootstrap_version + ' ' + nav_breakpoint, '*');
 
     if (bootstrap_version.startsWith("4")) {
+        pages = pages.replace(/\s?py-[a-z]{2}-0/g, ""); // Issue #12
         $('#navbar-right').html("<span class='nav-item py-" + nav_breakpoint + "-0'><a class='nav-link py-" + nav_breakpoint + "-0' onclick='quitapp()'><i class='fas fa-sign-out-alt fa-fw'></i> Back to Menu</a></span>");
         body.append("<div id='swipe-nav'><div id='swipe-header' style='background-color: " + menucolor + "; color: " + textcolor + "'><a href='./app.php'><img id='swipe-appicon' src='" + logo + "' /></a> <div id='swipe-username'><i class='fa fa-user fa-fw'></i> " + username + "</div></div>\n<div id='swipe-pages' class='swipe-list'>" + pages + "</div><div class='swipe-list'><span class='nav-item'><a class='nav-link' onclick='quitapp()'><i class='fas fa-sign-out-alt fa-fw'></i> Back to Menu</a></span></div></div>");
     } else {
