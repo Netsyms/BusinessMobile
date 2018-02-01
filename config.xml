@@ -9,6 +9,7 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <access origin="cdvfile://*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -44,6 +45,7 @@
     <plugin name="cordova-plugin-console" spec="git+https://github.com/apache/cordova-plugin-console.git" />
     <plugin name="cordova-plugin-device" spec="git+https://github.com/apache/cordova-plugin-device.git" />
     <plugin name="cordova-plugin-dialogs" spec="git+https://github.com/apache/cordova-plugin-dialogs.git" />
+    <plugin name="cordova-plugin-file" spec="^6.0.1" />
     <plugin name="cordova-plugin-headercolor" spec="^1.0.0" />
     <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />
     <plugin name="cordova-plugin-splashscreen" spec="git+https://github.com/apache/cordova-plugin-splashscreen.git" />

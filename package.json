@@ -14,6 +14,7 @@
         "cordova-plugin-device": "git+https://github.com/apache/cordova-plugin-device.git",
         "cordova-plugin-dialog": "0.0.1",
         "cordova-plugin-dialogs": "git+https://github.com/apache/cordova-plugin-dialogs.git",
+        "cordova-plugin-file": "^6.0.1",
         "cordova-plugin-headercolor": "^1.0.0",
         "cordova-plugin-inappbrowser": "^1.7.1",
         "cordova-plugin-splashscreen": "git+https://github.com/apache/cordova-plugin-splashscreen.git",
@@ -34,7 +35,8 @@
             "cordova-plugin-headercolor": {},
             "cordova-plugin-inappbrowser": {},
             "cordova-plugin-app-version": {},
-            "cordova-plugin-zeroconf": {}
+            "cordova-plugin-zeroconf": {},
+            "cordova-plugin-file": {}
         },
         "platforms": [
             "android"
