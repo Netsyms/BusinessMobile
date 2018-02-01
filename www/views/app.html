@@ -42,15 +42,18 @@
                         // Moved BS4 code to sidemenu.js
                         $.get("css/sidemenu.css", function (style) {
                             $('#appframe').contents().find('head').append("<style>" + style + "</style>");
-                            $.get("js/jquery-ui.min.js", function (script) {
+                            $.get("js/polyfills.js", function (script) {
                                 $('#appframe').contents().find('body').append("<script>" + script + "<\/script>");
-                                $.get("js/hammer.min.js", function (script) {
+                                $.get("js/jquery-ui.min.js", function (script) {
                                     $('#appframe').contents().find('body').append("<script>" + script + "<\/script>");
-                                    $.get("js/sidemenu.js", function (script) {
-                                        script = script.replace("__JQUERYFXOFF__", !(localStorage.getItem("animations") === null || localStorage.getItem("animations") === "true"));
-                                        script = script.replace("__USERNAME__", userinfo.realname);
-                                        script = script.replace("__LOGO__", icon);
+                                    $.get("js/hammer.min.js", function (script) {
                                         $('#appframe').contents().find('body').append("<script>" + script + "<\/script>");
+                                        $.get("js/sidemenu.js", function (script) {
+                                            script = script.replace("__JQUERYFXOFF__", !(localStorage.getItem("animations") === null || localStorage.getItem("animations") === "true"));
+                                            script = script.replace("__USERNAME__", userinfo.realname);
+                                            script = script.replace("__LOGO__", icon);
+                                            $('#appframe').contents().find('body').append("<script>" + script + "<\/script>");
+                                        });
                                     });
                                 });
                             });
