@@ -156,7 +156,6 @@ function setnavbar(type, screentitle, returnscreen) {
                 break;
             case "otp":
                 setnavbartitle("Auth Keys", true, "home");
-                addnavbarbtn("addotp", "ic_add.svg", "Add Key");
                 break;
             case "app":
                 setnavbartitle(screentitle, true, returnscreen);

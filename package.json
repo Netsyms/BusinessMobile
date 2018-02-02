@@ -8,6 +8,7 @@
     "license": "MPL-2.0",
     "dependencies": {
         "cordova-android": "^6.3.0",
+        "cordova-browser": "^4.1.0",
         "cordova-plugin-add-swift-support": "^1.7.0",
         "cordova-plugin-app-version": "^0.1.9",
         "cordova-plugin-console": "git+https://github.com/apache/cordova-plugin-console.git",
@@ -39,7 +40,8 @@
             "cordova-plugin-file": {}
         },
         "platforms": [
-            "android"
+            "android",
+            "browser"
         ]
     }
 }

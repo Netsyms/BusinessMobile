@@ -109,7 +109,7 @@ html, body {
     .navbar-right {
         margin-top: -6px;
     }
-    
+
     .navbar-right li a img {
         margin-top: -1px;
     }
@@ -125,4 +125,23 @@ html, body {
 
 .loading-text {
     font-size: 18px;
+}
+
+.circle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    border-radius: 50%;
+    height: 5rem;
+    width: 5rem;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 2rem;
+}
+
+.circle-btn img {
+    height: 3rem;
+    width: 3rem;
 }

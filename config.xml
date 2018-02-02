@@ -41,6 +41,7 @@
     </platform>
     <preference name="AutoHideSplashScreen" value="false" />
     <engine name="android" spec="^6.3.0" />
+    <engine name="browser" spec="^4.1.0" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-console" spec="git+https://github.com/apache/cordova-plugin-console.git" />
     <plugin name="cordova-plugin-device" spec="git+https://github.com/apache/cordova-plugin-device.git" />
