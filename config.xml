@@ -22,7 +22,7 @@
         <allow-intent href="market:*" />
         <preference name="AndroidLaunchMode" value="singleTop" />
         <preference name="android-minSdkVersion" value="19" />
-        <preference name="android-targetSdkVersion" value="26" />
+        <preference name="android-targetSdkVersion" value="27" />
         <preference name="SplashMaintainAspectRatio" value="true" />
         <preference name="HeaderColor" value="#2196f3" />
         <preference name="StatusBarBackgroundColor" value="#1976d2" />
@@ -55,5 +55,5 @@
     <plugin name="cordova-plugin-dialogs" spec="^2.0.1" />
     <plugin name="cordova-plugin-inappbrowser" spec="^2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
-    <engine name="android" spec="latest" />
+    <engine name="android" spec="^7.1.0" />
 </widget>
