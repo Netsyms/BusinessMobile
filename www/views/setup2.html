@@ -19,17 +19,19 @@
 
 <script>
     function savePassword() {
-        $.post(localStorage.getItem("syncurl"), {
-            username: localStorage.getItem("username"),
-            key: localStorage.getItem("key"),
+        $.post(setupsyncurl, {
+            username: setupusername,
+            key: setupsynckey,
             password: $('#passbox').val(),
             action: "check_password"
         }, function (data) {
             if (data.status === 'OK') {
-                localStorage.setItem("password", $('#passbox').val());
-                localStorage.setItem("setupcomplete", true);
-                navigator.notification.alert("Setup complete!", null, "Success", 'Continue');
-                openscreen("home");
+                setuppassword = $('#passbox').val();
+                var accid = addaccount(setupusername, setuppassword, setupsyncurl, setupsynckey);
+                switchaccount(accid);
+                localStorage.setItem("firstrun", "1");
+                navigator.notification.alert("Account connected!", null, "Success", 'Continue');
+                restartApplication();
             } else {
                 navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
             }

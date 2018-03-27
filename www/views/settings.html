@@ -7,6 +7,9 @@
         <i class="fa fa-key"></i> Pairing Code: <span id="pairingkey">None</span><br />
         <i class="fa fa-server"></i> Server: <span id="syncurl">None</span>
     </div>
+    <div class="list-group-item" onclick="openscreen('accounts', 'FADE');">
+        <b>Manage and switch accounts</b>
+    </div>
 </div>
 
 <div class="list-group">
@@ -15,8 +18,8 @@
         <p>Enter your new password if you changed it from AccountHub.</p>
     </div>
     <div class="list-group-item" onclick="deleteall()">
-        <b>Log out</b>
-        <p>Forget all cached account data (including sync key) and open the setup tool.</p>
+        <b>Disconnect All Accounts</b>
+        <p>Forget all account data for all connected accounts and open the setup tool.</p>
     </div>
 </div>
 
@@ -63,13 +66,13 @@
                 return;
             }
             // Wipe localStorage
-            localStorage.removeItem("setupcomplete");
             localStorage.removeItem("username");
             localStorage.removeItem("password");
             localStorage.removeItem("syncurl");
             localStorage.removeItem("key");
+            localStorage.removeItem("accounts");
             // force-reload app
-            navigator.notification.alert("Connection data and credentials erased.", function () {
+            navigator.notification.alert("All connection data and credentials erased.", function () {
                 restartApplication();
             }, "App Reset", 'Continue');
         }, "Are you sure?");
@@ -90,7 +93,7 @@
     }
 
     /**
-     * Prompts the user to enter their password, then checks the password and 
+     * Prompts the user to enter their password, then checks the password and
      * saves or displays an error.
      * @returns {undefined}
      */
@@ -105,7 +108,7 @@
                 }, function (data) {
                     if (data.status === 'OK') {
                         localStorage.setItem("password", results.input1);
-                        localStorage.setItem("setupcomplete", true);
+                        passwd(results.input1);
                         navigator.notification.alert("Saved password updated.", function () {
                             // Reload app just to be safe
                             restartApplication();
@@ -133,7 +136,7 @@
     cordova.getAppVersion.getVersionCode(function (version) {
         $('#app_version_code').text(version);
     });
-    
+
     if (localStorage.getItem("username")) {
         $("#username").text(localStorage.getItem("username"));
     }

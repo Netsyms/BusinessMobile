@@ -2,8 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-userinfo = null;
-
 /**
  * Switches the app to the given screen.
  * @param {String} screenname The name of the screen to show.
@@ -29,35 +27,6 @@ function openscreen(screenname, effect) {
     currentscreen = screenname;
 }
 
-/**
- * Fetch user info (name, email, etc) from the server and save to the global
- * variable `userinfo`.
- * @param function callback An optional function to run if/when the request
- * succeeds.
- */
-function getuserinfo(callback) {
-    $(".loading-text").text("Loading account...");
-    $.post(localStorage.getItem("syncurl"), {
-        username: localStorage.getItem("username"),
-        key: localStorage.getItem("key"),
-        password: localStorage.getItem("password"),
-        action: "user_info"
-    }, function (data) {
-        if (data.status === 'OK') {
-            $(".loading-text").text("Loading...");
-            userinfo = data.info;
-            if (typeof callback == 'function') {
-                callback();
-            }
-        } else {
-            navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
-            openscreen("homeloaderror");
-        }
-    }, "json").fail(function () {
-        navigator.notification.alert("Could not connect to the server.  Try again later.", null, "Error", 'Dismiss');
-        openscreen("homeloaderror");
-    });
-}
 
 function openfragment(fragment, target, effect) {
     if (effect === 'FADE') {
@@ -110,11 +79,11 @@ function setnavbartitle(title, showarrow, backscreen) {
 
 /**
  * Set the navbar.
- * @param String,boolean type false if no navbar, "home" for the home screen,
+ * @param {String,boolean} type false if no navbar, "home" for the home screen,
  * "settings" for settings, "app" for a custom title, or anything else for
  * a simple one.
- * @param String screentitle The title to show if type == "app"
- * @param String returnscreen Where to go back to.  Defaults to "home".
+ * @param {String} screentitle The title to show if type == "app"
+ * @param {String} returnscreen Where to go back to.  Defaults to "home".
  * @returns {undefined}
  */
 function setnavbar(type, screentitle, returnscreen) {
@@ -231,7 +200,7 @@ function restartApplication() {
 
 // Handle back button to close things
 document.addEventListener("backbutton", function (event) {
-    if (localStorage.getItem("setupcomplete")) {
+    if (isconfigvalid()) {
         if ($("#appframe").length && historyctr > 0) {
             console.log("going back");
             var iframe = document.getElementById("appframe");
@@ -264,7 +233,7 @@ document.addEventListener("deviceready", function () {
         $(this).parent().fadeOut("slow");
     });
 
-    if (localStorage.getItem("setupcomplete")) {
+    if (isconfigvalid()) {
         getuserinfo(function () {
             openscreen("home");
         });

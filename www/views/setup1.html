@@ -4,12 +4,15 @@
 <br />
 <div class="panel panel-blue">
     <div class="panel-heading">
-        <h3 class="panel-title">Setup</h3>
+        <h3 class="panel-title" id="setuptitle">Add Account</h3>
     </div>
     <div class="panel-body">
-        <p>Welcome! There's a few things we need to do to get everything ready.
-            <br /><br />
-            Open AccountHub on another device and go to your account settings.  Generate a mobile sync code, then press the button below to scan it.
+        <p>
+            <span class="firstrun-only" style="display: none;">
+                Welcome! There's a few things we need to do to get everything ready.
+                <br /><br />
+            </span>
+            Open AccountHub on another device and go to Sync settings.  Generate a mobile sync code, then press the button below to scan it.
         </p>
         <span class="btn btn-primary" onclick="scanCode()" id="scancodebtn">
             <i class="fa fa-qrcode"></i> Scan Code
@@ -38,6 +41,16 @@
 </div>
 
 <script>
+    setupusername = "";
+    setuppassword = "";
+    setupsynckey = "";
+    setupsyncurl = "";
+
+    if (localStorage.getItem("firstrun") === null) {
+        $("#setuptitle").text("Setup");
+        $(".firstrun-only").css("display", "");
+    }
+
     $('#use-security').click(function () {
         if (this.checked) {
             $('#protocol-select').text("https://");
@@ -83,29 +96,29 @@
 
     function manualsetup() {
         if ($('#syncurl').val().toLowerCase().startsWith("http")) {
-            var portal = $('#syncurl').val();
+            var syncurl = $('#syncurl').val();
         } else {
-            var portal = $('#protocol-select').text() + $('#syncurl').val();
+            var syncurl = $('#protocol-select').text() + $('#syncurl').val();
         }
         var username = $('#username').val();
         var key = $('#key').val().replace(/\s+/g, '');
-        checkAndSave(portal, username, key);
+        checkAndSave(syncurl, username, key);
     }
 
     function manualshow() {
         $('#manual_setup').css('display', 'block');
     }
 
-    function checkAndSave(portal, username, key) {
-        $.post(portal, {
+    function checkAndSave(syncurl, username, key) {
+        $.post(syncurl, {
             username: username,
             key: key,
             action: "check_key"
         }, function (data) {
             if (data.status === 'OK') {
-                localStorage.setItem("username", username);
-                localStorage.setItem("syncurl", portal);
-                localStorage.setItem("key", key);
+                setupusername = username;
+                setupsyncurl = syncurl;
+                setupsynckey = key;
                 openscreen("setup2");
             } else {
                 navigator.notification.alert(data.msg, null, "Error", 'Dismiss');
@@ -127,10 +140,10 @@
                             }
                             var url = result.text.replace("bizsync://", "");
                             var parts = url.split("/");
-                            var portal = parts[0].replace(/\\/g, "/");
+                            var syncurl = parts[0].replace(/\\/g, "/");
                             var username = parts[1];
                             var key = parts[2];
-                            checkAndSave(portal, username, key);
+                            checkAndSave(syncurl, username, key);
                         }
                     },
                     function (error) {
