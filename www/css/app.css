@@ -135,10 +135,11 @@ html, body {
     border-radius: 50%;
     height: 5rem;
     width: 5rem;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 0;
     margin: 2rem;
+    z-index: 99999;
 }
 
 .circle-btn img {
