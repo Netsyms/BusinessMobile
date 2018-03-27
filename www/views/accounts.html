@@ -33,7 +33,7 @@
         for (var j = 0; j < synckey.length - 6; j++) {
             stars += "*";
         }
-        synckey = $('<div/>').html(key.slice(0, 3) + stars + key.slice(-3)).html();
+        synckey = $('<div/>').html(synckey.slice(0, 3) + stars + synckey.slice(-3)).html();
         $("#accountlist").append("<div class=\"list-group-item\" id=\"accountitem_" + i + "\">"
                 + "<span class=\"pull-right\" style=\"color: red;\" onclick=\"deleteAccount(" + i + ")\"><i class=\"fa fa-trash-o\"></i></span>"
                 + "<div onclick=\"switchAccount(" + i + ")\" class=\"h3\" style=\"font-weight: bold;\"><i class=\"fa fa-user\"></i> " + username + "</div>"
